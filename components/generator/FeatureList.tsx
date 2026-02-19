@@ -1,87 +1,38 @@
-'use client';
+import { CoreFeature } from '@/types/idea';
 
-import { Feature } from '@/types/idea';
-import { Check, X } from 'lucide-react';
+const priorityColors: Record<string, string> = {
+  must: 'bg-red-500/20 text-red-400 border-red-500/30',
+  should: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  nice: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30',
+};
 
-interface FeatureListProps {
-  features: Feature[];
-  editable?: boolean;
-  onToggle?: (index: number) => void;
-}
-
-export function FeatureList({ features, editable = false, onToggle }: FeatureListProps) {
+export function FeatureList({ features }: { features: CoreFeature[] }) {
   return (
-    <ul className="space-y-2">
-      {features.map((feature, index) => (
-        <li
-          key={index}
-          className={`flex items-center gap-3 p-2.5 rounded-xl transition-all duration-300 ${
-            editable ? 'hover:bg-white/5 cursor-pointer' : ''
-          } ${!feature.included ? 'opacity-50' : ''}`}
-          onClick={() => editable && onToggle?.(index)}
-        >
-          <span
-            className={`flex-shrink-0 w-5 h-5 rounded-lg flex items-center justify-center ${
-              feature.included
-                ? 'bg-green-500/20 text-green-400'
-                : 'bg-red-500/20 text-red-400'
-            }`}
-          >
-            {feature.included ? (
-              <Check className="w-3 h-3" />
-            ) : (
-              <X className="w-3 h-3" />
-            )}
-          </span>
-          <span className={`text-sm text-gray-300 ${!feature.included ? 'line-through text-gray-500' : ''}`}>
-            {feature.name}
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-interface FeatureListReadOnlyProps {
-  features: Feature[];
-}
-
-export function FeatureListReadOnly({ features }: FeatureListReadOnlyProps) {
-  const included = features.filter((f) => f.included);
-  const excluded = features.filter((f) => !f.included);
-
-  return (
-    <div className="space-y-4">
-      {included.length > 0 && (
-        <div>
-          <h4 className="text-sm font-medium text-gray-400 mb-2">
-            Included Features
-          </h4>
-          <ul className="space-y-1">
-            {included.map((feature, index) => (
-              <li key={index} className="flex items-center gap-2 text-sm text-gray-300">
-                <Check className="w-4 h-4 text-green-400" />
-                <span>{feature.name}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      {excluded.length > 0 && (
-        <div>
-          <h4 className="text-sm font-medium text-gray-400 mb-2">
-            Excluded Features
-          </h4>
-          <ul className="space-y-1">
-            {excluded.map((feature, index) => (
-              <li key={index} className="flex items-center gap-2 text-sm text-gray-500">
-                <X className="w-4 h-4 text-red-400" />
-                <span className="line-through">{feature.name}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-white/10">
+            <th className="text-left py-2 text-xs font-medium text-zinc-500 uppercase tracking-wider">Feature</th>
+            <th className="text-left py-2 text-xs font-medium text-zinc-500 uppercase tracking-wider hidden md:table-cell">Description</th>
+            <th className="text-center py-2 text-xs font-medium text-zinc-500 uppercase tracking-wider">Priority</th>
+            <th className="text-right py-2 text-xs font-medium text-zinc-500 uppercase tracking-wider">Hours</th>
+          </tr>
+        </thead>
+        <tbody>
+          {features.map((f, i) => (
+            <tr key={i} className="border-b border-white/5">
+              <td className="py-2.5 text-white font-medium">{f.name}</td>
+              <td className="py-2.5 text-zinc-400 hidden md:table-cell">{f.description}</td>
+              <td className="py-2.5 text-center">
+                <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium border ${priorityColors[f.priority]}`}>
+                  {f.priority}
+                </span>
+              </td>
+              <td className="py-2.5 text-right text-zinc-300">{f.est_hours}h</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

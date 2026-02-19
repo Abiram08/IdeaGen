@@ -1,329 +1,307 @@
-'use client';
-
-import { ProjectRoadmap, CoreFeature } from '@/types/idea';
-import { TechBadge, TechBadgeList } from './TechBadge';
+import { ProjectRoadmap } from '@/types/idea';
+import { TechBadge } from './TechBadge';
+import { FeatureList } from './FeatureList';
 import { WeekTimeline } from './WeekTimeline';
-import {
-  Target,
-  Users,
-  Sparkles,
-  Code,
-  AlertTriangle,
-  Clock,
-  Trophy,
-  Rocket,
-} from 'lucide-react';
+import { Printer, AlertTriangle, Zap, Target, Lightbulb, ChevronDown, ChevronUp, Swords, Cpu } from 'lucide-react';
+import { useState } from 'react';
 
-interface RoadmapCardProps {
-  roadmap: ProjectRoadmap;
+function CompetitorCard({ competitor }: { competitor: { name: string; description: string; strengths: string[]; weaknesses: string[]; how_we_differ: string } }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="glass rounded-xl p-4">
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between text-left">
+        <div>
+          <h4 className="text-sm font-semibold text-white">{competitor.name}</h4>
+          <p className="text-xs text-zinc-400 mt-0.5">{competitor.description}</p>
+        </div>
+        {open ? <ChevronUp className="w-4 h-4 text-zinc-500 flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-zinc-500 flex-shrink-0" />}
+      </button>
+      {open && (
+        <div className="mt-3 space-y-3 border-t border-white/5 pt-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <span className="text-xs font-medium text-green-400 uppercase tracking-wider">Strengths</span>
+              <ul className="mt-1 space-y-1">
+                {competitor.strengths.map((s, i) => (
+                  <li key={i} className="text-xs text-zinc-300 flex items-start gap-1.5">
+                    <span className="text-green-400 mt-0.5">+</span>{s}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <span className="text-xs font-medium text-red-400 uppercase tracking-wider">Weaknesses</span>
+              <ul className="mt-1 space-y-1">
+                {competitor.weaknesses.map((w, i) => (
+                  <li key={i} className="text-xs text-zinc-300 flex items-start gap-1.5">
+                    <span className="text-red-400 mt-0.5">-</span>{w}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div>
+            <span className="text-xs font-medium text-blue-400 uppercase tracking-wider">How We Differ</span>
+            <p className="text-xs text-zinc-300 mt-1">{competitor.how_we_differ}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
-const priorityColors: Record<CoreFeature['priority'], string> = {
-  must: 'bg-red-500/20 text-red-300 border border-red-500/30',
-  should: 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30',
-  nice: 'bg-green-500/20 text-green-300 border border-green-500/30',
-};
-
-const priorityLabels: Record<CoreFeature['priority'], string> = {
-  must: 'Must Have',
-  should: 'Should Have',
-  nice: 'Nice to Have',
-};
-
-export function RoadmapCard({ roadmap }: RoadmapCardProps) {
-  const difficultyPercentage = (roadmap.difficulty_score / 10) * 100;
-
+function TechRecCard({ rec }: { rec: { category: string; recommended: string; pros: string[]; cons: string[]; alternatives: { name: string; reason: string }[] } }) {
+  const [open, setOpen] = useState(false);
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-          {roadmap.title}
-        </h1>
-        <p className="text-lg text-gray-400 italic">
-          {roadmap.tagline}
-        </p>
-      </div>
-
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="glass-card rounded-2xl p-4 text-center">
-          <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center mx-auto mb-2">
-            <Clock className="w-5 h-5 text-green-400" />
-          </div>
-          <p className="text-2xl font-bold text-white">
-            {roadmap.estimated_total_hours}h
-          </p>
-          <p className="text-xs text-gray-500">Total Hours</p>
+    <div className="glass rounded-xl p-4">
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between text-left">
+        <div>
+          <span className="text-xs text-zinc-500">{rec.category}</span>
+          <p className="text-sm font-semibold text-white">{rec.recommended}</p>
         </div>
-        <div className="glass-card rounded-2xl p-4 text-center">
-          <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center mx-auto mb-2">
-            <Trophy className="w-5 h-5 text-green-400" />
-          </div>
-          <p className="text-2xl font-bold text-white">
-            {roadmap.roadmap.length}
-          </p>
-          <p className="text-xs text-gray-500">Weeks</p>
-        </div>
-        <div className="glass-card rounded-2xl p-4 text-center">
-          <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center mx-auto mb-2">
-            <Sparkles className="w-5 h-5 text-green-400" />
-          </div>
-          <p className="text-2xl font-bold text-white">
-            {roadmap.core_features.length}
-          </p>
-          <p className="text-xs text-gray-500">Features</p>
-        </div>
-        <div className="glass-card rounded-2xl p-4 text-center">
-          <div className="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center mx-auto mb-2">
-            <AlertTriangle className="w-5 h-5 text-orange-400" />
-          </div>
-          <p className="text-2xl font-bold text-white">
-            {roadmap.technical_risks.length}
-          </p>
-          <p className="text-xs text-gray-500">Risks</p>
-        </div>
-      </div>
-
-      {/* Problem Statement */}
-      <section className="glass-card rounded-2xl p-6">
-        <h2 className="flex items-center gap-3 text-lg font-semibold text-white mb-3">
-          <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
-            <Target className="w-4 h-4 text-green-400" />
-          </div>
-          Problem Statement
-        </h2>
-        <p className="text-gray-300">{roadmap.problem_statement}</p>
-      </section>
-
-      {/* Target User & Unique Angle */}
-      <div className="grid md:grid-cols-2 gap-4">
-        <section className="glass-card rounded-2xl p-6">
-          <h2 className="flex items-center gap-3 text-lg font-semibold text-white mb-3">
-            <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
-              <Users className="w-4 h-4 text-green-400" />
+        {open ? <ChevronUp className="w-4 h-4 text-zinc-500 flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-zinc-500 flex-shrink-0" />}
+      </button>
+      {open && (
+        <div className="mt-3 space-y-3 border-t border-white/5 pt-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <span className="text-xs font-medium text-green-400 uppercase tracking-wider">Pros</span>
+              <ul className="mt-1 space-y-1">
+                {rec.pros.map((p, i) => (
+                  <li key={i} className="text-xs text-zinc-300 flex items-start gap-1.5">
+                    <span className="text-green-400 mt-0.5">+</span>{p}
+                  </li>
+                ))}
+              </ul>
             </div>
-            Target User
-          </h2>
-          <p className="text-gray-300">{roadmap.target_user}</p>
-        </section>
-        <section className="glass-card rounded-2xl p-6">
-          <h2 className="flex items-center gap-3 text-lg font-semibold text-white mb-3">
-            <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-green-400" />
-            </div>
-            Unique Angle
-          </h2>
-          <p className="text-gray-300">{roadmap.unique_angle}</p>
-        </section>
-      </div>
-
-      {/* Tech Stack */}
-      <section className="glass-card rounded-2xl p-6">
-        <h2 className="flex items-center gap-3 text-lg font-semibold text-white mb-4">
-          <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
-            <Code className="w-4 h-4 text-green-400" />
-          </div>
-          Tech Stack
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <div>
-            <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Frontend
-            </span>
-            <div className="mt-2">
-              <TechBadge tech={roadmap.tech_stack.frontend} variant="primary" />
+            <div>
+              <span className="text-xs font-medium text-red-400 uppercase tracking-wider">Cons</span>
+              <ul className="mt-1 space-y-1">
+                {rec.cons.map((c, i) => (
+                  <li key={i} className="text-xs text-zinc-300 flex items-start gap-1.5">
+                    <span className="text-red-400 mt-0.5">-</span>{c}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-          <div>
-            <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Backend
-            </span>
-            <div className="mt-2">
-              <TechBadge tech={roadmap.tech_stack.backend} variant="secondary" />
-            </div>
-          </div>
-          <div>
-            <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Database
-            </span>
-            <div className="mt-2">
-              <TechBadge tech={roadmap.tech_stack.database} />
-            </div>
-          </div>
-          <div>
-            <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Auth
-            </span>
-            <div className="mt-2">
-              <TechBadge tech={roadmap.tech_stack.auth} />
-            </div>
-          </div>
-          <div>
-            <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Hosting
-            </span>
-            <div className="mt-2">
-              <TechBadge tech={roadmap.tech_stack.hosting} />
-            </div>
-          </div>
-          {roadmap.tech_stack.extras.length > 0 && (
-            <div className="col-span-2 md:col-span-1">
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Extras
-              </span>
-              <div className="mt-2">
-                <TechBadgeList techs={roadmap.tech_stack.extras} />
+          {rec.alternatives.length > 0 && (
+            <div>
+              <span className="text-xs font-medium text-purple-400 uppercase tracking-wider">Alternatives</span>
+              <div className="mt-1 space-y-1">
+                {rec.alternatives.map((a, i) => (
+                  <div key={i} className="text-xs text-zinc-300">
+                    <span className="text-purple-300 font-medium">{a.name}</span>
+                    <span className="text-zinc-500"> — {a.reason}</span>
+                  </div>
+                ))}
               </div>
             </div>
           )}
         </div>
-      </section>
+      )}
+    </div>
+  );
+}
 
-      {/* Core Features Table */}
-      <section className="glass-card rounded-2xl p-6">
-        <h2 className="text-lg font-semibold text-white mb-4">
-          Core Features
-        </h2>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-white/10">
-                <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Feature
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Priority
-                </th>
-                <th className="text-right py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Est. Hours
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {roadmap.core_features.map((feature, index) => (
-                <tr key={index} className="hover:bg-white/5 transition-colors">
-                  <td className="py-4 px-4">
-                    <p className="font-medium text-white">
-                      {feature.name}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      {feature.description}
-                    </p>
-                  </td>
-                  <td className="py-4 px-4">
-                    <span
-                      className={`inline-flex px-3 py-1 rounded-lg text-xs font-medium ${
-                        priorityColors[feature.priority]
-                      }`}
-                    >
-                      {priorityLabels[feature.priority]}
-                    </span>
-                  </td>
-                  <td className="py-4 px-4 text-right">
-                    <span className="text-sm font-medium text-gray-300">
-                      {feature.est_hours}h
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+export function RoadmapCard({ roadmap }: { roadmap: ProjectRoadmap }) {
+  return (
+    <div className="space-y-8 print:space-y-4" id="roadmap-print">
+      {/* Header */}
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-white">{roadmap.title}</h1>
+        <p className="text-lg text-zinc-400 mt-1">{roadmap.tagline}</p>
+      </div>
 
-      {/* Weekly Roadmap */}
-      <section className="glass-card rounded-2xl p-6">
-        <h2 className="text-lg font-semibold text-white mb-6">
-          Week-by-Week Roadmap
-        </h2>
-        <WeekTimeline weeks={roadmap.roadmap} />
-      </section>
-
-      {/* Difficulty Score */}
-      <section className="glass-card rounded-2xl p-6">
-        <h2 className="text-lg font-semibold text-white mb-4">
-          Difficulty Score
-        </h2>
-        <div className="flex items-center gap-4">
-          <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
-            <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                roadmap.difficulty_score <= 3
-                  ? 'bg-gradient-to-r from-green-500 to-green-400'
-                  : roadmap.difficulty_score <= 6
-                    ? 'bg-gradient-to-r from-yellow-500 to-yellow-400'
-                    : 'bg-gradient-to-r from-red-500 to-red-400'
-              }`}
-              style={{ width: `${difficultyPercentage}%` }}
-            />
+      {/* First thing to build — highlighted CTA */}
+      <div className="p-6 rounded-2xl bg-[#07D160]/10 border border-[#07D160]/30">
+        <div className="flex items-start gap-3">
+          <Zap className="w-6 h-6 text-[#07D160] flex-shrink-0 mt-0.5" />
+          <div>
+            <h3 className="text-sm font-semibold text-[#07D160] uppercase tracking-wider mb-1">
+              First Thing to Build
+            </h3>
+            <p className="text-white font-medium">{roadmap.first_thing_to_build}</p>
           </div>
-          <span className="text-2xl font-bold text-white min-w-[3rem] text-right">
-            {roadmap.difficulty_score}/10
+        </div>
+      </div>
+
+      {/* Stats Row */}
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        {[
+          { label: 'Difficulty', value: `${roadmap.difficulty_score}/10` },
+          { label: 'Est. Hours', value: `${roadmap.estimated_total_hours}h` },
+          { label: 'Features', value: `${roadmap.core_features.length}` },
+          { label: 'Weeks', value: `${roadmap.roadmap.length}` },
+        ].map((stat, i) => (
+          <div key={i} className="flex items-center gap-2 px-4 py-2 rounded-full glass text-sm">
+            <span className="text-zinc-500">{stat.label}:</span>
+            <span className="text-white font-semibold">{stat.value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Problem + Target */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="glass-card rounded-xl p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Target className="w-4 h-4 text-[#07D160]" />
+            <h3 className="text-sm font-semibold text-white">Problem Statement</h3>
+          </div>
+          <p className="text-sm text-zinc-300">{roadmap.problem_statement}</p>
+          <p className="text-xs text-zinc-500 mt-2">
+            Target user: <span className="text-zinc-300">{roadmap.target_user}</span>
+          </p>
+        </div>
+        <div className="glass-card rounded-xl p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Lightbulb className="w-4 h-4 text-[#07D160]" />
+            <h3 className="text-sm font-semibold text-white">Unique Angle</h3>
+          </div>
+          <p className="text-sm text-zinc-300">{roadmap.unique_angle}</p>
+        </div>
+      </div>
+
+      {/* Tech Stack Grid */}
+      <div className="glass-card rounded-xl p-5">
+        <h3 className="text-sm font-semibold text-white mb-4">Tech Stack</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+          {[
+            { label: 'Frontend', value: roadmap.tech_stack.frontend },
+            { label: 'Backend', value: roadmap.tech_stack.backend },
+            { label: 'Database', value: roadmap.tech_stack.database },
+            { label: 'Auth', value: roadmap.tech_stack.auth },
+            { label: 'Hosting', value: roadmap.tech_stack.hosting },
+          ].map((item, i) => (
+            <div key={i}>
+              <span className="text-xs text-zinc-500">{item.label}</span>
+              <p className="text-zinc-200 font-medium">{item.value}</p>
+            </div>
+          ))}
+          {roadmap.tech_stack.extras.length > 0 && (
+            <div>
+              <span className="text-xs text-zinc-500">Extras</span>
+              <div className="flex flex-wrap gap-1 mt-1">
+                {roadmap.tech_stack.extras.map((e, i) => (
+                  <TechBadge key={i} label={e} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Difficulty + Hours */}
+      <div className="glass-card rounded-xl p-5">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-white">Difficulty</h3>
+          <span className="text-sm text-zinc-400">
+            ~{roadmap.estimated_total_hours} total hours
           </span>
         </div>
-        <p className="text-sm text-gray-500 mt-3">
-          {roadmap.difficulty_score <= 3 && 'Beginner-friendly project'}
-          {roadmap.difficulty_score > 3 &&
-            roadmap.difficulty_score <= 6 &&
-            'Moderate complexity — some experience helpful'}
-          {roadmap.difficulty_score > 6 && 'Advanced project — significant experience recommended'}
-        </p>
-      </section>
+        <div className="flex items-center gap-3">
+          <div className="flex-1 h-2 bg-zinc-800 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#07D160] to-[#07D160]/60"
+              style={{ width: `${roadmap.difficulty_score * 10}%` }}
+            />
+          </div>
+          <span className="text-sm font-bold text-white">{roadmap.difficulty_score}/10</span>
+        </div>
+      </div>
 
-      {/* Technical Risks */}
+      {/* Core Features */}
+      <div className="glass-card rounded-xl p-5">
+        <h3 className="text-sm font-semibold text-white mb-4">Core Features</h3>
+        <FeatureList features={roadmap.core_features} />
+      </div>
+
+      {/* Week Timeline */}
+      <div className="glass-card rounded-xl p-5">
+        <h3 className="text-sm font-semibold text-white mb-4">Weekly Roadmap</h3>
+        <WeekTimeline weeks={roadmap.roadmap} />
+      </div>
+
+      {/* Risks */}
       {roadmap.technical_risks.length > 0 && (
-        <section className="glass rounded-2xl p-6 border border-orange-500/30 bg-orange-500/5">
-          <h2 className="flex items-center gap-3 text-lg font-semibold text-orange-300 mb-4">
-            <AlertTriangle className="w-5 h-5" />
-            Technical Risks
-          </h2>
-          <ul className="space-y-2">
-            {roadmap.technical_risks.map((risk, index) => (
-              <li
-                key={index}
-                className="flex items-start gap-3 text-orange-200/80"
-              >
-                <span className="text-orange-400 mt-1">•</span>
-                <span>{risk}</span>
+        <div className="rounded-xl p-5 bg-amber-500/10 border border-amber-500/20">
+          <div className="flex items-center gap-2 mb-3">
+            <AlertTriangle className="w-4 h-4 text-amber-400" />
+            <h3 className="text-sm font-semibold text-amber-300">Technical Risks</h3>
+          </div>
+          <ul className="space-y-1.5">
+            {roadmap.technical_risks.map((risk, i) => (
+              <li key={i} className="text-sm text-amber-200/80 flex items-start gap-2">
+                <span className="text-amber-400 mt-0.5">•</span>
+                {risk}
               </li>
             ))}
           </ul>
-        </section>
+        </div>
       )}
 
       {/* Similar Products */}
-      {roadmap.similar_products.length > 0 && (
-        <section className="glass-card rounded-2xl p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">
-            Similar Products to Study
-          </h2>
+      {roadmap.similar_products.length > 0 && !roadmap.competitive_analysis && (
+        <div className="glass-card rounded-xl p-5">
+          <h3 className="text-sm font-semibold text-white mb-3">Similar Products</h3>
           <div className="flex flex-wrap gap-2">
-            {roadmap.similar_products.map((product, index) => (
-              <span
-                key={index}
-                className="px-4 py-2 glass rounded-xl text-sm text-gray-300"
-              >
-                {product}
-              </span>
+            {roadmap.similar_products.map((p, i) => (
+              <TechBadge key={i} label={p} />
             ))}
           </div>
-        </section>
+        </div>
       )}
 
-      {/* First Thing to Build - CTA */}
-      <section className="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-r from-green-600 to-green-500">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,...')] opacity-10" />
-        <div className="relative flex items-start gap-4">
-          <div className="flex-shrink-0 w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-            <Rocket className="w-6 h-6 text-white" />
+      {/* Competitive Analysis */}
+      {roadmap.competitive_analysis && (
+        <div className="glass-card rounded-xl p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <Swords className="w-4 h-4 text-[#07D160]" />
+            <h3 className="text-sm font-semibold text-white">Competitive Analysis</h3>
           </div>
-          <div>
-            <h2 className="text-lg font-semibold text-white mb-2">First Thing to Build</h2>
-            <p className="text-green-100">{roadmap.first_thing_to_build}</p>
+          <div className="space-y-3 mb-4">
+            {roadmap.competitive_analysis.competitors.map((c, i) => (
+              <CompetitorCard key={i} competitor={c} />
+            ))}
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="glass rounded-xl p-4">
+              <span className="text-xs font-medium text-green-400 uppercase tracking-wider">Market Gap</span>
+              <p className="text-sm text-zinc-300 mt-1">{roadmap.competitive_analysis.market_gap}</p>
+            </div>
+            <div className="glass rounded-xl p-4">
+              <span className="text-xs font-medium text-blue-400 uppercase tracking-wider">Positioning Strategy</span>
+              <p className="text-sm text-zinc-300 mt-1">{roadmap.competitive_analysis.positioning_strategy}</p>
+            </div>
           </div>
         </div>
-      </section>
+      )}
+
+      {/* Tech Recommendations */}
+      {roadmap.tech_recommendations && roadmap.tech_recommendations.length > 0 && (
+        <div className="glass-card rounded-xl p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <Cpu className="w-4 h-4 text-[#07D160]" />
+            <h3 className="text-sm font-semibold text-white">Tech Recommendations</h3>
+          </div>
+          <div className="grid md:grid-cols-2 gap-3">
+            {roadmap.tech_recommendations.map((r, i) => (
+              <TechRecCard key={i} rec={r} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Print */}
+      <div className="flex justify-center print:hidden">
+        <button
+          onClick={() => window.print()}
+          className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 text-zinc-300 hover:text-white hover:bg-white/10 transition-colors"
+        >
+          <Printer className="w-4 h-4" />
+          Print / Save as PDF
+        </button>
+      </div>
     </div>
   );
 }

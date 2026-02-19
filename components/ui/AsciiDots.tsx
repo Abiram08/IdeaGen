@@ -2,164 +2,95 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 
-interface Dot {
-  x: number;
-  y: number;
-  char: string;
-  element: HTMLSpanElement | null;
-}
-
-const ASCII_CHARS = ['·', ':', '.', '•', '∙', '◦', '○', '●'];
-
 export function AsciiDots() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const dotsRef = useRef<Dot[]>([]);
-  const animatingDotsRef = useRef<Set<HTMLSpanElement>>(new Set());
+  const dotsRef = useRef<HTMLSpanElement[]>([]);
+  const rafRef = useRef<number>(0);
+  const mouseRef = useRef({ x: -1000, y: -1000 });
 
-  const triggerGlitter = useCallback((element: HTMLSpanElement, x: number, y: number) => {
-    if (animatingDotsRef.current.has(element)) return;
-    
-    animatingDotsRef.current.add(element);
-    element.classList.add('animate');
-    
-    // Trigger nearby dots with delay
-    const nearbyDots = dotsRef.current.filter(dot => {
-      if (!dot.element || dot.element === element) return false;
-      const distance = Math.sqrt(Math.pow(dot.x - x, 2) + Math.pow(dot.y - y, 2));
-      return distance < 80;
-    });
+  const RADIUS = 80;
+  const SPACING = 28;
 
-    nearbyDots.forEach((dot, index) => {
-      if (dot.element && !animatingDotsRef.current.has(dot.element)) {
-        setTimeout(() => {
-          if (dot.element) {
-            animatingDotsRef.current.add(dot.element);
-            dot.element.classList.add('animate');
-            setTimeout(() => {
-              if (dot.element) {
-                dot.element.classList.remove('animate');
-                animatingDotsRef.current.delete(dot.element);
-              }
-            }, 600);
-          }
-        }, index * 30);
-      }
-    });
-
-    setTimeout(() => {
-      element.classList.remove('animate');
-      animatingDotsRef.current.delete(element);
-    }, 600);
-  }, []);
-
-  useEffect(() => {
+  const buildGrid = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    
-    // Clear existing dots
+    // Clear existing
     container.innerHTML = '';
     dotsRef.current = [];
 
-    // Create dot pattern (sparse, like Junie's world map style)
-    const gridSize = 25;
-    const dots: Dot[] = [];
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const cols = Math.ceil(w / SPACING);
+    const rows = Math.ceil(h / SPACING);
 
-    for (let x = 0; x < width; x += gridSize) {
-      for (let y = 0; y < height; y += gridSize) {
-        // Random chance to place a dot (creates sparse pattern)
-        if (Math.random() > 0.7) {
-          // Add some clustering effect
-          const clusterChance = Math.sin(x * 0.01) * Math.cos(y * 0.01);
-          if (Math.random() < 0.3 + clusterChance * 0.3) {
-            const offsetX = (Math.random() - 0.5) * gridSize * 0.8;
-            const offsetY = (Math.random() - 0.5) * gridSize * 0.8;
-            
-            dots.push({
-              x: x + offsetX,
-              y: y + offsetY,
-              char: ASCII_CHARS[Math.floor(Math.random() * ASCII_CHARS.length)],
-              element: null,
-            });
-          }
-        }
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const span = document.createElement('span');
+        span.className = 'ascii-dot';
+        span.textContent = '.';
+        span.style.left = `${c * SPACING}px`;
+        span.style.top = `${r * SPACING}px`;
+        container.appendChild(span);
+        dotsRef.current.push(span);
       }
     }
-
-    // Create DOM elements
-    dots.forEach((dot) => {
-      const span = document.createElement('span');
-      span.className = 'ascii-dot';
-      span.textContent = dot.char;
-      span.style.left = `${dot.x}px`;
-      span.style.top = `${dot.y}px`;
-      
-      // Add mouse/touch events
-      span.addEventListener('mouseenter', () => triggerGlitter(span, dot.x, dot.y));
-      span.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        triggerGlitter(span, dot.x, dot.y);
-      }, { passive: false });
-      
-      container.appendChild(span);
-      dot.element = span;
-    });
-
-    dotsRef.current = dots;
-
-    // Handle mouse move for proximity effect
-    const handleMouseMove = (e: MouseEvent) => {
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
-
-      dotsRef.current.forEach((dot) => {
-        if (!dot.element) return;
-        const distance = Math.sqrt(Math.pow(dot.x - mouseX, 2) + Math.pow(dot.y - mouseY, 2));
-        
-        if (distance < 60 && !animatingDotsRef.current.has(dot.element)) {
-          triggerGlitter(dot.element, dot.x, dot.y);
-        }
-      });
-    };
-
-    // Throttle mouse move
-    let lastMove = 0;
-    const throttledMouseMove = (e: MouseEvent) => {
-      const now = Date.now();
-      if (now - lastMove > 50) {
-        lastMove = now;
-        handleMouseMove(e);
-      }
-    };
-
-    window.addEventListener('mousemove', throttledMouseMove);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('mousemove', throttledMouseMove);
-    };
-  }, [triggerGlitter]);
-
-  // Handle resize
-  useEffect(() => {
-    const handleResize = () => {
-      // Re-render dots on resize
-      const container = containerRef.current;
-      if (container) {
-        container.innerHTML = '';
-        dotsRef.current = [];
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    buildGrid();
+
+    const handleResize = () => buildGrid();
+    window.addEventListener('resize', handleResize);
+
+    const handleMove = (x: number, y: number) => {
+      mouseRef.current = { x, y };
+    };
+
+    const onMouse = (e: MouseEvent) => handleMove(e.clientX, e.clientY);
+    const onTouch = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
+    window.addEventListener('mousemove', onMouse);
+    window.addEventListener('touchmove', onTouch, { passive: true });
+
+    const animate = () => {
+      const { x, y } = mouseRef.current;
+      const dots = dotsRef.current;
+
+      for (let i = 0; i < dots.length; i++) {
+        const dot = dots[i];
+        const rect = dot.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dist = Math.sqrt((cx - x) ** 2 + (cy - y) ** 2);
+
+        if (dist < RADIUS) {
+          dot.classList.add('glitter');
+        } else {
+          dot.classList.remove('glitter');
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', onMouse);
+      window.removeEventListener('touchmove', onTouch);
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, [buildGrid]);
+
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className="ascii-dots-container"
       aria-hidden="true"
     />

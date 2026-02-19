@@ -1,65 +1,57 @@
 'use client';
 
-import { useState, useRef, useEffect, FormEvent } from 'react';
-import { ConversationMessage, IdeaState, BrainstormResponse } from '@/types/idea';
-import { Send, Bot, User } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { IdeaState, ConversationMessage, BrainstormResponse } from '@/types/idea';
+import { Send, Rocket, RotateCcw } from 'lucide-react';
 
 interface BrainstormChatProps {
   ideaState: IdeaState;
   onIdeaUpdate: (newState: IdeaState) => void;
+  onConfirm: () => void;
+  onStartOver: () => void;
 }
 
-export function BrainstormChat({ ideaState, onIdeaUpdate }: BrainstormChatProps) {
+export function BrainstormChat({ ideaState, onIdeaUpdate, onConfirm, onStartOver }: BrainstormChatProps) {
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [streamingMessage, setStreamingMessage] = useState('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const [isStreaming, setIsStreaming] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, streamingMessage]);
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
+  const handleSend = async () => {
+    const text = input.trim();
+    if (!text || isStreaming) return;
 
-    const userMessage = input.trim();
     setInput('');
-    setIsLoading(true);
-    setStreamingMessage('');
+    const userMsg: ConversationMessage = { role: 'user', content: text };
+    const updatedHistory = [...messages, userMsg];
+    setMessages(updatedHistory);
 
-    // Add user message to history
-    const newUserMessage: ConversationMessage = {
-      role: 'user',
-      content: userMessage,
-    };
-    setMessages((prev) => [...prev, newUserMessage]);
+    // Add placeholder assistant message
+    const placeholderIdx = updatedHistory.length;
+    setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
+    setIsStreaming(true);
 
     try {
       const response = await fetch('/api/brainstorm', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: userMessage,
+          message: text,
           ideaState,
-          conversationHistory: messages,
+          conversationHistory: updatedHistory.slice(0, -1), // exclude the placeholder
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to get response');
-      }
+      if (!response.ok) throw new Error('Brainstorm request failed');
+      if (!response.body) throw new Error('No response body');
 
-      const reader = response.body?.getReader();
-      if (!reader) throw new Error('No response body');
-
+      const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let fullResponse = '';
+      let fullText = '';
 
       while (true) {
         const { done, value } = await reader.read();
@@ -72,165 +64,159 @@ export function BrainstormChat({ ideaState, onIdeaUpdate }: BrainstormChatProps)
           if (line.startsWith('data: ')) {
             const data = line.slice(6);
             if (data === '[DONE]') continue;
-
             try {
               const parsed = JSON.parse(data);
-              if (parsed.content) {
-                fullResponse += parsed.content;
-                setStreamingMessage(fullResponse);
+              const content =
+                parsed.content ||
+                parsed.choices?.[0]?.delta?.content ||
+                '';
+              if (content) {
+                fullText += content;
+                setMessages((prev) => {
+                  const updated = [...prev];
+                  updated[placeholderIdx] = { role: 'assistant', content: fullText };
+                  return updated;
+                });
               }
             } catch {
-              // Skip malformed JSON
+              // skip malformed chunks
             }
           }
         }
       }
 
-      // Parse the final response to extract message and ideaState
+      // Try to parse the full response as BrainstormResponse JSON
       try {
-        const parsed: BrainstormResponse = JSON.parse(fullResponse);
-        
-        // Add assistant message to history
-        const assistantMessage: ConversationMessage = {
-          role: 'assistant',
-          content: parsed.message || fullResponse,
-        };
-        setMessages((prev) => [...prev, assistantMessage]);
-
-        // Update idea state if changed
-        if (parsed.updatedIdeaState) {
-          onIdeaUpdate(parsed.updatedIdeaState);
+        const cleaned = fullText.trim();
+        const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsed: BrainstormResponse = JSON.parse(jsonMatch[0]);
+          // Update the display message
+          if (parsed.message) {
+            setMessages((prev) => {
+              const updated = [...prev];
+              updated[placeholderIdx] = { role: 'assistant', content: parsed.message };
+              return updated;
+            });
+          }
+          // Update idea state
+          if (parsed.updatedIdeaState) {
+            onIdeaUpdate(parsed.updatedIdeaState);
+          }
         }
       } catch {
-        // If not valid JSON, just add the raw response as a message
-        const assistantMessage: ConversationMessage = {
-          role: 'assistant',
-          content: fullResponse,
-        };
-        setMessages((prev) => [...prev, assistantMessage]);
+        // If JSON parse fails, keep the raw streamed text
       }
     } catch (error) {
-      console.error('Brainstorm error:', error);
-      const errorMessage: ConversationMessage = {
-        role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.',
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[placeholderIdx] = {
+          role: 'assistant',
+          content: 'Sorry, something went wrong. Please try again.',
+        };
+        return updated;
+      });
     } finally {
-      setIsLoading(false);
-      setStreamingMessage('');
+      setIsStreaming(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
     }
   };
 
   return (
-    <div className="flex flex-col h-full glass-card rounded-2xl overflow-hidden">
-      {/* Header */}
-      <div className="flex-shrink-0 px-5 py-4 border-b border-white/5 bg-gradient-to-r from-green-500/10 to-green-600/10">
-        <h2 className="font-semibold text-white flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-            <Bot className="w-4 h-4 text-white" />
-          </div>
-          Brainstorm Assistant
-        </h2>
-        <p className="text-xs text-gray-400 mt-1">
-          Ask questions or request changes to refine your idea
-        </p>
-      </div>
-
-      {/* Messages */}
+    <div className="flex flex-col h-full">
+      {/* Chat messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.length === 0 && !streamingMessage && (
-          <div className="text-center py-8">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500/20 to-green-600/20 flex items-center justify-center mx-auto mb-4">
-              <Bot className="w-8 h-8 text-green-400" />
+        {messages.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-zinc-500 text-sm">
+              Start chatting to refine your idea. Try:
+            </p>
+            <div className="mt-3 space-y-2">
+              {[
+                'Change the backend to Python',
+                'Add real-time notifications',
+                'Simplify it for a weekend project',
+              ].map((suggestion, i) => (
+                <button
+                  key={i}
+                  onClick={() => setInput(suggestion)}
+                  className="block mx-auto text-xs text-[#07D160]/70 hover:text-[#07D160] transition-colors"
+                >
+                  &quot;{suggestion}&quot;
+                </button>
+              ))}
             </div>
-            <p className="text-gray-400 text-sm">
-              Start the conversation to refine your project idea!
-            </p>
-            <p className="text-gray-500 text-xs mt-2">
-              Try: &quot;Change the frontend to Vue&quot; or &quot;Add a feature for notifications&quot;
-            </p>
           </div>
         )}
 
-        {messages.map((message, index) => (
+        {messages.map((msg, i) => (
           <div
-            key={index}
-            className={`flex gap-3 ${
-              message.role === 'user' ? 'justify-end' : 'justify-start'
-            }`}
+            key={i}
+            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            {message.role === 'assistant' && (
-              <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-                <Bot className="w-4 h-4 text-white" />
-              </div>
-            )}
             <div
-              className={`max-w-[80%] px-4 py-3 rounded-2xl ${
-                message.role === 'user'
-                  ? 'bg-gradient-to-r from-green-600 to-green-500 text-white rounded-br-md'
-                  : 'glass text-gray-100 rounded-bl-md'
+              className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm ${
+                msg.role === 'user'
+                  ? 'bg-[#07D160]/20 text-white rounded-br-md'
+                  : 'bg-white/5 text-zinc-300 rounded-bl-md'
               }`}
             >
-              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+              {msg.content || (
+                <span className="inline-flex gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#07D160] animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#07D160] animate-pulse" style={{ animationDelay: '0.2s' }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#07D160] animate-pulse" style={{ animationDelay: '0.4s' }} />
+                </span>
+              )}
             </div>
-            {message.role === 'user' && (
-              <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
-                <User className="w-4 h-4 text-gray-300" />
-              </div>
-            )}
           </div>
         ))}
-
-        {/* Streaming message */}
-        {streamingMessage && (
-          <div className="flex gap-3 justify-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-              <Bot className="w-4 h-4 text-white" />
-            </div>
-            <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-md glass text-gray-100">
-              <p className="text-sm whitespace-pre-wrap">{streamingMessage}</p>
-            </div>
-          </div>
-        )}
-
-        {isLoading && !streamingMessage && (
-          <div className="flex gap-3 justify-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-              <Bot className="w-4 h-4 text-white" />
-            </div>
-            <div className="px-4 py-3 rounded-2xl rounded-bl-md glass">
-              <div className="w-4 h-4 spinner" />
-            </div>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
+        <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
-      <form
-        onSubmit={handleSubmit}
-        className="flex-shrink-0 p-4 border-t border-white/5"
-      >
-        <div className="flex gap-3">
+      {/* Input + bottom bar */}
+      <div className="border-t border-white/5 p-4 space-y-3">
+        <div className="flex gap-2">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
-            disabled={isLoading}
-            className="input-dark flex-1"
+            onKeyDown={handleKeyDown}
+            placeholder="Refine your idea..."
+            disabled={isStreaming}
+            className="flex-1 input-dark text-sm"
           />
           <button
-            type="submit"
-            disabled={isLoading || !input.trim()}
-            className="glow-button px-4 py-3 rounded-xl text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleSend}
+            disabled={isStreaming || !input.trim()}
+            className="px-4 py-2 rounded-xl bg-[#07D160] text-black font-medium text-sm hover:bg-[#07D160]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             <Send className="w-4 h-4" />
           </button>
         </div>
-      </form>
+
+        <div className="flex gap-2">
+          <button
+            onClick={onConfirm}
+            className="flex-1 glow-button flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm"
+          >
+            <Rocket className="w-4 h-4" />
+            Build The Roadmap
+          </button>
+          <button
+            onClick={onStartOver}
+            className="px-4 py-2.5 rounded-xl bg-white/5 text-zinc-400 hover:text-white text-sm transition-colors"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

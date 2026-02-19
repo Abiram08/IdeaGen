@@ -5,7 +5,12 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { IdeaState, UserProfile, ProjectRoadmap } from '@/types/idea';
 import { RoadmapCard } from '@/components/generator/RoadmapCard';
-import { Sparkles, ArrowLeft, User, Clock, Users, ChevronDown, Zap, Download, RotateCcw } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { UserMenu } from '@/components/auth/UserMenu';
+import { shareRoadmap } from '@/lib/firebase/firestore';
+import { downloadMarkdown } from '@/lib/export/markdown';
+import { downloadScaffoldZip } from '@/lib/export/scaffold';
+import { Sparkles, ArrowLeft, User, Clock, Users, ChevronDown, Zap, Download, RotateCcw, FileText, Share2, FolderDown, Check, Loader2 } from 'lucide-react';
 
 type ProfileStep = 'form' | 'loading' | 'complete';
 
@@ -20,10 +25,15 @@ export default function RoadmapPage() {
   const [skillLevel, setSkillLevel] = useState<UserProfile['skill_level']>('intermediate');
   const [timeAvailable, setTimeAvailable] = useState<UserProfile['time_available']>('2 weeks');
   const [teamSize, setTeamSize] = useState<UserProfile['team_size']>('solo');
+  const { user } = useAuth();
+  const [shareUrl, setShareUrl] = useState('');
+  const [sharing, setSharing] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
+  const [scaffoldLoading, setScaffoldLoading] = useState(false);
 
   useEffect(() => {
     const storedIdea = sessionStorage.getItem('finalIdea');
-    
+
     if (storedIdea) {
       try {
         const parsed = JSON.parse(storedIdea);
@@ -33,6 +43,12 @@ export default function RoadmapPage() {
       }
     } else {
       router.push('/pick');
+    }
+
+    // Pre-fill skill level from Step 1 selection
+    const storedSkill = sessionStorage.getItem('ideagenSkillLevel') as UserProfile['skill_level'] | null;
+    if (storedSkill && ['beginner', 'intermediate', 'advanced'].includes(storedSkill)) {
+      setSkillLevel(storedSkill);
     }
   }, [router]);
 
@@ -104,13 +120,16 @@ export default function RoadmapPage() {
               </span>
             </div>
           </div>
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 px-4 py-2 rounded-full glass text-gray-300 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Back to Brainstorm</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => router.back()}
+              className="flex items-center gap-2 px-4 py-2 rounded-full glass text-gray-300 hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm">Back to Brainstorm</span>
+            </button>
+            <UserMenu />
+          </div>
         </div>
       </header>
 
@@ -209,7 +228,14 @@ export default function RoadmapPage() {
                 {/* Error Message */}
                 {error && (
                   <div className="p-4 glass rounded-xl border border-red-500/30 bg-red-500/10">
-                    <p className="text-sm text-red-400">{error}</p>
+                    <p className="text-sm text-red-400 mb-3">{error}</p>
+                    <button
+                      type="submit"
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors text-sm font-medium"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                      Try Again
+                    </button>
                   </div>
                 )}
 
@@ -237,9 +263,17 @@ export default function RoadmapPage() {
               <h2 className="text-xl font-semibold text-white mb-2">
                 Building Your Roadmap
               </h2>
-              <p className="text-gray-400">
-                Claude is analyzing your idea and creating a detailed project plan...
-              </p>
+              <div className="space-y-2">
+                <p className="text-gray-400 animate-pulse">
+                  Groq is building your blueprint...
+                </p>
+                <p className="text-gray-500 text-sm animate-pulse" style={{ animationDelay: '500ms' }}>
+                  Generating tech stack recommendations...
+                </p>
+                <p className="text-gray-500 text-sm animate-pulse" style={{ animationDelay: '1000ms' }}>
+                  Creating week-by-week roadmap...
+                </p>
+              </div>
             </div>
           )}
 
@@ -253,9 +287,9 @@ export default function RoadmapPage() {
       </main>
 
       {/* Footer Actions */}
-      {step === 'complete' && (
+      {step === 'complete' && roadmap && (
         <footer className="relative z-10 flex-shrink-0 px-6 py-4 border-t border-white/5 bg-[#0a0a10]/80 backdrop-blur-xl">
-          <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-3">
             <button
               onClick={() => router.push('/generate')}
               className="flex items-center gap-2 px-5 py-2.5 rounded-full glass text-gray-400 hover:text-white transition-colors"
@@ -263,13 +297,91 @@ export default function RoadmapPage() {
               <RotateCcw className="w-4 h-4" />
               <span>Generate New Ideas</span>
             </button>
-            <button
-              onClick={() => window.print()}
-              className="glow-button flex items-center gap-2 px-6 py-3 rounded-full text-white font-medium"
-            >
-              <Download className="w-4 h-4" />
-              <span>Print / Save as PDF</span>
-            </button>
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Export .md */}
+              <button
+                onClick={() => downloadMarkdown(roadmap)}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full glass text-gray-400 hover:text-white transition-colors"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Export .md</span>
+              </button>
+
+              {/* Share Link */}
+              {user && (
+                <button
+                  onClick={async () => {
+                    if (shareUrl) {
+                      await navigator.clipboard.writeText(shareUrl);
+                      setShowCopied(true);
+                      setTimeout(() => setShowCopied(false), 2000);
+                      return;
+                    }
+                    setSharing(true);
+                    try {
+                      const id = await shareRoadmap(user.uid, roadmap, roadmap.title);
+                      const url = `${window.location.origin}/shared/${id}`;
+                      setShareUrl(url);
+                      await navigator.clipboard.writeText(url);
+                      setShowCopied(true);
+                      setTimeout(() => setShowCopied(false), 2000);
+                    } catch (err) {
+                      console.error('Share failed:', err);
+                    } finally {
+                      setSharing(false);
+                    }
+                  }}
+                  disabled={sharing}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-full glass text-gray-400 hover:text-white transition-colors disabled:opacity-50"
+                >
+                  {showCopied ? (
+                    <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied!</span></>
+                  ) : sharing ? (
+                    <><Loader2 className="w-4 h-4 animate-spin" /><span>Sharing...</span></>
+                  ) : (
+                    <><Share2 className="w-4 h-4" /><span>Share Link</span></>
+                  )}
+                </button>
+              )}
+
+              {/* Download Starter */}
+              <button
+                onClick={async () => {
+                  setScaffoldLoading(true);
+                  try {
+                    const res = await fetch('/api/scaffold', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ roadmap }),
+                    });
+                    if (!res.ok) throw new Error('Scaffold generation failed');
+                    const data = await res.json();
+                    await downloadScaffoldZip(data.scaffold, roadmap.title);
+                  } catch (err) {
+                    console.error('Scaffold download failed:', err);
+                  } finally {
+                    setScaffoldLoading(false);
+                  }
+                }}
+                disabled={scaffoldLoading}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full glass text-gray-400 hover:text-white transition-colors disabled:opacity-50"
+              >
+                {scaffoldLoading ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" /><span>Generating...</span></>
+                ) : (
+                  <><FolderDown className="w-4 h-4" /><span>Download Starter</span></>
+                )}
+              </button>
+
+              {/* Print / PDF */}
+              <button
+                onClick={() => window.print()}
+                className="glow-button flex items-center gap-2 px-6 py-3 rounded-full text-white font-medium"
+              >
+                <Download className="w-4 h-4" />
+                <span>Print / Save as PDF</span>
+              </button>
+            </div>
           </div>
         </footer>
       )}

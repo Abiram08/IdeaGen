@@ -9,11 +9,7 @@ interface HNHit {
   objectID: string;
 }
 
-interface HNSearchResponse {
-  hits: HNHit[];
-}
-
-export async function fetchHackerNews(interest: string): Promise<RawContent[]> {
+export async function fetchFromHN(interest: string): Promise<RawContent[]> {
   try {
     const url = new URL('https://hn.algolia.com/api/v1/search');
     url.searchParams.set('query', interest);
@@ -21,16 +17,12 @@ export async function fetchHackerNews(interest: string): Promise<RawContent[]> {
     url.searchParams.set('hitsPerPage', '10');
 
     const response = await fetch(url.toString());
-    
-    if (!response.ok) {
-      console.error('HN API error:', response.status);
-      return [];
-    }
+    if (!response.ok) return [];
 
-    const data: HNSearchResponse = await response.json();
+    const data: { hits: HNHit[] } = await response.json();
 
     return data.hits
-      .filter((hit) => hit.title && (hit.story_text || hit.url))
+      .filter((hit) => hit.story_text && hit.story_text.length > 30)
       .map((hit) => ({
         title: hit.title,
         text: hit.story_text || '',
@@ -38,7 +30,7 @@ export async function fetchHackerNews(interest: string): Promise<RawContent[]> {
         source: 'hackernews' as const,
       }));
   } catch (error) {
-    console.error('Error fetching from Hacker News:', error);
+    console.error('Error fetching from HN:', error);
     return [];
   }
 }

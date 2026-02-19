@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { IdeaState, ProjectScope } from '@/types/idea';
 import { BrainstormChat } from '@/components/generator/BrainstormChat';
 import { LiveIdeaPanel } from '@/components/generator/LiveIdeaPanel';
+import { UserMenu } from '@/components/auth/UserMenu';
 import { Sparkles, ArrowLeft, ArrowRight, RotateCcw, Zap } from 'lucide-react';
 
 export default function BrainstormPage() {
@@ -47,7 +48,7 @@ export default function BrainstormPage() {
     
     const featureName = newFeatures[index].name;
     const newRemoved = newFeatures[index].included
-      ? ideaState.removed.filter(f => f !== featureName)
+      ? ideaState.removed.filter((f: string) => f !== featureName)
       : [...ideaState.removed, featureName];
     
     handleIdeaUpdate({
@@ -101,13 +102,16 @@ export default function BrainstormPage() {
               </span>
             </div>
           </div>
-          <button
-            onClick={() => router.push('/pick')}
-            className="flex items-center gap-2 px-4 py-2 rounded-full glass text-gray-300 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Back to Ideas</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => router.push('/pick')}
+              className="flex items-center gap-2 px-4 py-2 rounded-full glass text-gray-300 hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm">Back to Ideas</span>
+            </button>
+            <UserMenu />
+          </div>
         </div>
       </header>
 
@@ -118,15 +122,15 @@ export default function BrainstormPage() {
           <BrainstormChat
             ideaState={ideaState}
             onIdeaUpdate={handleIdeaUpdate}
+            onConfirm={handleProceedToRoadmap}
+            onStartOver={handleStartOver}
           />
         </div>
 
         {/* Right Panel - Live Idea (40%) */}
         <div className="w-2/5 p-4 overflow-hidden flex flex-col bg-[#0c0c12]">
           <LiveIdeaPanel
-            ideaState={ideaState}
-            onFeatureToggle={handleFeatureToggle}
-            onScopeChange={handleScopeChange}
+            idea={ideaState}
           />
         </div>
       </main>

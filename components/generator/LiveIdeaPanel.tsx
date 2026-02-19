@@ -1,180 +1,120 @@
 'use client';
 
-import { IdeaState, ProjectScope } from '@/types/idea';
-import { TechBadge, TechBadgeList } from './TechBadge';
-import { FeatureList } from './FeatureList';
-import { Target, Code, Layers, Clock, Sparkles } from 'lucide-react';
+import { IdeaState } from '@/types/idea';
+import { TechBadge } from './TechBadge';
+import { Check, X, Plus, Minus, Cpu, Database, Globe, Layers } from 'lucide-react';
 
-interface LiveIdeaPanelProps {
-  ideaState: IdeaState;
-  onFeatureToggle?: (index: number) => void;
-  onScopeChange?: (scope: ProjectScope) => void;
-}
-
-const scopeLabels: Record<ProjectScope, { label: string; description: string }> = {
-  'solo-weekend': { label: 'Weekend Project', description: '1-2 days' },
-  'solo-2weeks': { label: '2 Week Sprint', description: 'Solo developer' },
-  'team-hackathon': { label: 'Hackathon', description: '24-48 hours, team' },
-  'mvp-startup': { label: 'Startup MVP', description: '4-8 weeks' },
+const scopeLabels: Record<string, string> = {
+  'solo-weekend': 'Solo Weekend',
+  'solo-2weeks': 'Solo 2 Weeks',
+  'team-hackathon': 'Team Hackathon',
+  'mvp-startup': 'MVP Startup',
 };
 
-export function LiveIdeaPanel({
-  ideaState,
-  onFeatureToggle,
-  onScopeChange,
-}: LiveIdeaPanelProps) {
+export function LiveIdeaPanel({ idea }: { idea: IdeaState }) {
   return (
-    <div className="h-full glass-card rounded-2xl overflow-hidden flex flex-col">
-      {/* Header */}
-      <div className="flex-shrink-0 px-5 py-4 border-b border-white/5 bg-gradient-to-r from-green-500/10 to-green-600/10">
-        <h2 className="font-semibold text-white flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-            <Sparkles className="w-4 h-4 text-white" />
-          </div>
-          Your Idea
-        </h2>
-        <p className="text-xs text-gray-400 mt-1">
-          Live preview — updates as you chat
-        </p>
+    <div className="h-full overflow-y-auto p-6 space-y-6">
+      {/* Title */}
+      <div>
+        <h2 className="text-xl font-bold text-white">{idea.title}</h2>
+        <span className="inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium bg-[#07D160]/20 text-[#07D160] border border-[#07D160]/30">
+          {scopeLabels[idea.scope] || idea.scope}
+        </span>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-6">
-        {/* Title */}
-        <div>
-          <h3 className="text-xl font-bold text-white">
-            {ideaState.title}
-          </h3>
-        </div>
+      {/* Problem */}
+      <div>
+        <h3 className="text-xs font-medium text-[#07D160] uppercase tracking-wider mb-1">Problem</h3>
+        <p className="text-sm text-zinc-300">{idea.problem}</p>
+      </div>
 
-        {/* Problem */}
-        <div>
-          <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-            <Target className="w-3 h-3 text-green-400" />
-            Problem
-          </h4>
-          <p className="text-sm text-gray-300">
-            {ideaState.problem}
-          </p>
-        </div>
+      {/* Concept */}
+      <div>
+        <h3 className="text-xs font-medium text-[#07D160] uppercase tracking-wider mb-1">Concept</h3>
+        <p className="text-sm text-zinc-300">{idea.concept}</p>
+      </div>
 
-        {/* Concept */}
-        <div>
-          <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-            <Layers className="w-3 h-3 text-green-400" />
-            Concept
-          </h4>
-          <p className="text-sm text-gray-300">
-            {ideaState.concept}
-          </p>
-        </div>
-
-        {/* Tech Stack */}
-        <div>
-          <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-            <Code className="w-3 h-3 text-green-400" />
-            Tech Stack
-          </h4>
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-gray-500 w-20">Frontend:</span>
-              <TechBadge tech={ideaState.tech_stack.frontend} variant="primary" />
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-gray-500 w-20">Backend:</span>
-              <TechBadge tech={ideaState.tech_stack.backend} variant="secondary" />
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-gray-500 w-20">Database:</span>
-              <TechBadge tech={ideaState.tech_stack.database} />
-            </div>
-            {ideaState.tech_stack.extra.length > 0 && (
-              <div className="flex items-start gap-3">
-                <span className="text-xs text-gray-500 w-20 pt-1">Extras:</span>
-                <TechBadgeList techs={ideaState.tech_stack.extra} maxDisplay={3} />
-              </div>
-            )}
+      {/* Tech Stack */}
+      <div>
+        <h3 className="text-xs font-medium text-[#07D160] uppercase tracking-wider mb-2">Tech Stack</h3>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm text-zinc-300">
+            <Globe className="w-3.5 h-3.5 text-zinc-500" />
+            <span className="text-zinc-500">Frontend:</span>
+            <span>{idea.tech_stack.frontend}</span>
           </div>
-        </div>
-
-        {/* Features */}
-        <div>
-          <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">
-            Features
-          </h4>
-          <FeatureList
-            features={ideaState.features}
-            editable={!!onFeatureToggle}
-            onToggle={onFeatureToggle}
-          />
-        </div>
-
-        {/* Scope */}
-        <div>
-          <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-            <Clock className="w-3 h-3 text-orange-400" />
-            Project Scope
-          </h4>
-          {onScopeChange ? (
-            <div className="grid grid-cols-2 gap-2">
-              {(Object.keys(scopeLabels) as ProjectScope[]).map((scope) => (
-                <button
-                  key={scope}
-                  onClick={() => onScopeChange(scope)}
-                  className={`p-3 rounded-xl text-left transition-all duration-300 ${
-                    ideaState.scope === scope
-                      ? 'glass border border-green-500/50 shadow-[0_0_20px_rgba(7,209,96,0.2)]'
-                      : 'glass border border-transparent hover:border-white/10'
-                  }`}
-                >
-                  <span className={`text-xs font-medium block ${
-                    ideaState.scope === scope ? 'text-green-400' : 'text-gray-300'
-                  }`}>
-                    {scopeLabels[scope].label}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    {scopeLabels[scope].description}
-                  </span>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="inline-flex items-center gap-2 px-4 py-2 glass rounded-xl">
-              <span className="text-sm font-medium text-green-400">
-                {scopeLabels[ideaState.scope].label}
-              </span>
-              <span className="text-xs text-gray-500">
-                ({scopeLabels[ideaState.scope].description})
-              </span>
+          <div className="flex items-center gap-2 text-sm text-zinc-300">
+            <Cpu className="w-3.5 h-3.5 text-zinc-500" />
+            <span className="text-zinc-500">Backend:</span>
+            <span>{idea.tech_stack.backend}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-zinc-300">
+            <Database className="w-3.5 h-3.5 text-zinc-500" />
+            <span className="text-zinc-500">Database:</span>
+            <span>{idea.tech_stack.database}</span>
+          </div>
+          {idea.tech_stack.extra.length > 0 && (
+            <div className="flex items-start gap-2 text-sm">
+              <Layers className="w-3.5 h-3.5 text-zinc-500 mt-0.5" />
+              <span className="text-zinc-500">Extras:</span>
+              <div className="flex flex-wrap gap-1">
+                {idea.tech_stack.extra.map((e, i) => (
+                  <TechBadge key={i} label={e} />
+                ))}
+              </div>
             </div>
           )}
         </div>
-
-        {/* Modifications */}
-        {(ideaState.added.length > 0 || ideaState.removed.length > 0) && (
-          <div className="pt-4 border-t border-white/5">
-            <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">
-              Modifications
-            </h4>
-            {ideaState.added.length > 0 && (
-              <div className="mb-3">
-                <span className="text-xs text-green-400">+ Added:</span>
-                <p className="text-xs text-gray-400 mt-1">
-                  {ideaState.added.join(', ')}
-                </p>
-              </div>
-            )}
-            {ideaState.removed.length > 0 && (
-              <div>
-                <span className="text-xs text-red-400">- Removed:</span>
-                <p className="text-xs text-gray-400 mt-1">
-                  {ideaState.removed.join(', ')}
-                </p>
-              </div>
-            )}
-          </div>
-        )}
       </div>
+
+      {/* Features */}
+      <div>
+        <h3 className="text-xs font-medium text-[#07D160] uppercase tracking-wider mb-2">Features</h3>
+        <ul className="space-y-1.5">
+          {idea.features.map((f, i) => (
+            <li key={i} className="flex items-center gap-2 text-sm">
+              {f.included ? (
+                <Check className="w-3.5 h-3.5 text-[#07D160]" />
+              ) : (
+                <X className="w-3.5 h-3.5 text-zinc-500" />
+              )}
+              <span className={f.included ? 'text-zinc-300' : 'text-zinc-500 line-through'}>
+                {f.name}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Added */}
+      {idea.added.length > 0 && (
+        <div>
+          <h3 className="text-xs font-medium text-[#07D160] uppercase tracking-wider mb-2">Added</h3>
+          <ul className="space-y-1">
+            {idea.added.map((item, i) => (
+              <li key={i} className="flex items-center gap-2 text-sm text-green-400">
+                <Plus className="w-3.5 h-3.5" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Removed */}
+      {idea.removed.length > 0 && (
+        <div>
+          <h3 className="text-xs font-medium text-red-400 uppercase tracking-wider mb-2">Removed</h3>
+          <ul className="space-y-1">
+            {idea.removed.map((item, i) => (
+              <li key={i} className="flex items-center gap-2 text-sm text-red-400">
+                <Minus className="w-3.5 h-3.5" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

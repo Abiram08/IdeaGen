@@ -1,4 +1,77 @@
-// Gemini API client
+// Gemini API client — handles idea extraction (Stage 1)
+
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { RawContent, ExtractedIdea, GenerationParams } from '@/types/idea';
+import { EXTRACT_SYSTEM_PROMPT, buildExtractPrompt } from './prompts';
+
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!);
+const flashModel = genAI.getGenerativeModel({ model: 'gemini-3-flash-preview' });
+
+function stripFences(text: string): string {
+  let cleaned = text.trim();
+  if (cleaned.startsWith('```json')) cleaned = cleaned.slice(7);
+  else if (cleaned.startsWith('```')) cleaned = cleaned.slice(3);
+  if (cleaned.endsWith('```')) cleaned = cleaned.slice(0, -3);
+  return cleaned.trim();
+}
+
+export async function extractIdeas(
+  params: GenerationParams,
+  content: RawContent[]
+): Promise<ExtractedIdea[]> {
+  const userPrompt = buildExtractPrompt(params, content);
+  const fullPrompt = `${EXTRACT_SYSTEM_PROMPT}\n\n${userPrompt}`;
+
+  let response = await flashModel.generateContent(fullPrompt);
+  let text = response.response.text();
+  let cleaned = stripFences(text);
+
+  try {
+    const ideas: ExtractedIdea[] = JSON.parse(cleaned);
+    if (!Array.isArray(ideas) || ideas.length !== 3) {
+      throw new Error('Expected exactly 3 ideas');
+    }
+
+    // Ensure suggested_features exists on each idea
+    ideas.forEach((idea: any) => {
+      idea.suggested_features = Array.isArray(idea.suggested_features) ? idea.suggested_features : [];
+    });
+
+    // Validate source URLs against actual content
+    const validatedIdeas = ideas.filter((idea: any) => {
+      if (!idea.source_url || idea.source_url === '') return false;
+      return content.some((item) => item.url === idea.source_url);
+    });
+
+    return validatedIdeas;
+  } catch {
+    // Retry once with stricter instruction
+    const retryPrompt = `${fullPrompt}\n\nIMPORTANT: You MUST return ONLY a valid JSON array of exactly 3 objects. No markdown, no text, no explanation — just the raw JSON array.`;
+    response = await flashModel.generateContent(retryPrompt);
+    text = response.response.text();
+    cleaned = stripFences(text);
+
+    const ideas: ExtractedIdea[] = JSON.parse(cleaned);
+    if (!Array.isArray(ideas)) {
+      throw new Error('Gemini did not return a valid array');
+    }
+
+    // Ensure suggested_features exists on retry too
+    ideas.forEach((idea: any) => {
+      idea.suggested_features = Array.isArray(idea.suggested_features) ? idea.suggested_features : [];
+    });
+
+    // Validate source URLs on retry too
+    const validatedIdeas = ideas.filter((idea: any) => {
+      if (!idea.source_url || idea.source_url === '') return false;
+      return content.some((item) => item.url === idea.source_url);
+    });
+
+    return validatedIdeas.slice(0, 3);
+  }
+}
+
+// ============ GENERIC GEMINI CALL (for IdeaVault roadmaps) ============
 
 interface GeminiResponse {
   candidates?: Array<{

@@ -1,42 +1,33 @@
-// API route for fetching content from all sources
-
 import { NextRequest, NextResponse } from 'next/server';
-import { Domain } from '@/types/idea';
-import { aggregateAllSources } from '@/lib/sources/aggregator';
+import { fetchAllSources } from '@/lib/sources/aggregator';
+import { DOMAIN_SEARCH_TERMS, Domain } from '@/types/idea';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { domain, interest } = body as { domain: Domain; interest: string };
+    const { domain } = await request.json();
 
-    if (!domain || !interest) {
+    if (!domain) {
       return NextResponse.json(
-        { error: 'Domain and interest are required' },
+        { error: 'Domain is required' },
         { status: 400 }
       );
     }
 
-    const result = await aggregateAllSources(domain, interest);
+    const searchTerm = DOMAIN_SEARCH_TERMS[domain as Domain] || domain;
+    const result = await fetchAllSources(domain, searchTerm);
 
     if (result.content.length === 0) {
       return NextResponse.json(
-        { 
-          error: 'No content found from any source',
-          details: result.errors 
-        },
+        { error: 'No content found from any source. Try different keywords.' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({
-      content: result.content,
-      sources: result.sources,
-      errors: result.errors,
-    });
+    return NextResponse.json(result);
   } catch (error) {
-    console.error('Fetch API error:', error);
+    console.error('Fetch route error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch content' },
+      { error: error instanceof Error ? error.message : 'Failed to fetch content' },
       { status: 500 }
     );
   }

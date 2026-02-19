@@ -1,56 +1,50 @@
-// API route for extracting ideas using Claude
-
 import { NextRequest, NextResponse } from 'next/server';
-import { RawContent, ExtractedIdea } from '@/types/idea';
-import { callClaude, parseClaudeJSON } from '@/lib/ai/claude';
-import { EXTRACT_SYSTEM_PROMPT, getExtractUserPrompt } from '@/lib/ai/prompts';
+import { extractIdeas } from '@/lib/ai/gemini';
+import { generateIdeasWithGroq } from '@/lib/ai/groq';
+import { mergeIdeas } from '@/lib/sources/aggregator';
+import type { GenerationParams, RawContent } from '@/types/idea';
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await request.json();
-    const { domain, content } = body as { domain: string; content: RawContent[] };
+    const body = await req.json();
+    const { domain, skillLevel, techPreference, timeline, projectType, content } = body;
 
-    if (!domain || !content || content.length === 0) {
+    if (!domain || !content) {
       return NextResponse.json(
-        { error: 'Domain and content are required' },
+        { error: 'domain and content are required' },
         { status: 400 }
       );
     }
 
-    if (!process.env.ANTHROPIC_API_KEY) {
+    const params: GenerationParams = {
+      domain,
+      skillLevel: skillLevel ?? 'intermediate',
+      techPreference: techPreference ?? 'no-preference',
+      timeline: timeline ?? '2 weeks',
+      projectType: projectType ?? 'hackathon',
+    };
+
+    // Fire BOTH tracks in parallel
+    const [communityResult, aiResult] = await Promise.allSettled([
+      extractIdeas(params, content as RawContent[]),
+      generateIdeasWithGroq(params),
+    ]);
+
+    const communityIdeas =
+      communityResult.status === 'fulfilled' ? communityResult.value : [];
+    const aiIdeas = aiResult.status === 'fulfilled' ? aiResult.value : [];
+
+    const finalIdeas = mergeIdeas(communityIdeas, aiIdeas);
+
+    if (finalIdeas.length === 0) {
       return NextResponse.json(
-        { error: 'Anthropic API key not configured' },
+        { error: 'Could not generate ideas. Try a different keyword.' },
         { status: 500 }
       );
     }
 
-    const userPrompt = getExtractUserPrompt(domain, content);
-    const response = await callClaude(EXTRACT_SYSTEM_PROMPT, userPrompt);
-    
-    const ideas = parseClaudeJSON<ExtractedIdea[]>(response);
-
-    // Validate the response structure
-    if (!Array.isArray(ideas) || ideas.length === 0) {
-      throw new Error('Invalid response structure from Claude');
-    }
-
-    // Ensure we have exactly 3 ideas
-    const validatedIdeas = ideas.slice(0, 3).map((idea) => ({
-      title: idea.title || 'Untitled Idea',
-      problem: idea.problem || 'No problem defined',
-      concept: idea.concept || 'No concept defined',
-      source_platform: idea.source_platform || 'hackernews',
-      source_url: idea.source_url || '#',
-      rough_tech: Array.isArray(idea.rough_tech) ? idea.rough_tech : [],
-      why_interesting: idea.why_interesting || 'Interesting project idea',
-    }));
-
-    return NextResponse.json({ ideas: validatedIdeas });
-  } catch (error) {
-    console.error('Extract API error:', error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to extract ideas' },
-      { status: 500 }
-    );
+    return NextResponse.json({ ideas: finalIdeas });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

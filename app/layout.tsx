@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { AsciiDots } from '@/components/ui/AsciiDots';
+import { Providers } from './providers';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -25,9 +26,11 @@ export default function RootLayout({
         <div className="noise" />
         
         {/* Main content */}
-        <div className="relative min-h-screen z-10">
-          {children}
-        </div>
+        <Providers>
+          <div className="relative min-h-screen z-10">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

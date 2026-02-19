@@ -2,31 +2,17 @@
 
 import { RawContent } from '@/types/idea';
 
-interface RedditToken {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-}
-
 interface RedditPost {
   data: {
     title: string;
     selftext: string;
-    url: string;
     permalink: string;
-  };
-}
-
-interface RedditSearchResponse {
-  data: {
-    children: RedditPost[];
   };
 }
 
 let cachedToken: { token: string; expires: number } | null = null;
 
-async function getRedditToken(): Promise<string> {
-  // Return cached token if still valid
+async function getToken(): Promise<string> {
   if (cachedToken && Date.now() < cachedToken.expires) {
     return cachedToken.token;
   }
@@ -45,32 +31,26 @@ async function getRedditToken(): Promise<string> {
     headers: {
       Authorization: `Basic ${auth}`,
       'Content-Type': 'application/x-www-form-urlencoded',
-      'User-Agent': 'ProjectIdeaGen/1.0',
+      'User-Agent': 'IdeaGen/1.0',
     },
     body: 'grant_type=client_credentials',
   });
 
-  if (!response.ok) {
-    throw new Error(`Reddit auth failed: ${response.status}`);
-  }
+  if (!response.ok) throw new Error(`Reddit auth failed: ${response.status}`);
 
-  const data: RedditToken = await response.json();
-
-  // Cache the token with a safety margin
+  const data = await response.json();
   cachedToken = {
     token: data.access_token,
     expires: Date.now() + (data.expires_in - 60) * 1000,
   };
-
   return data.access_token;
 }
 
-export async function fetchReddit(interest: string): Promise<RawContent[]> {
+export async function fetchFromReddit(interest: string): Promise<RawContent[]> {
   try {
-    const token = await getRedditToken();
-
-    const subreddits = 'SideProject+hackathon+learnprogramming+startups';
-    const url = new URL(`https://oauth.reddit.com/r/${subreddits}/search`);
+    const token = await getToken();
+    const subs = 'SideProject+hackathon+learnprogramming+startups+webdev';
+    const url = new URL(`https://oauth.reddit.com/r/${subs}/search`);
     url.searchParams.set('q', interest);
     url.searchParams.set('sort', 'top');
     url.searchParams.set('limit', '10');
@@ -79,22 +59,19 @@ export async function fetchReddit(interest: string): Promise<RawContent[]> {
     const response = await fetch(url.toString(), {
       headers: {
         Authorization: `Bearer ${token}`,
-        'User-Agent': 'ProjectIdeaGen/1.0',
+        'User-Agent': 'IdeaGen/1.0',
       },
     });
 
-    if (!response.ok) {
-      console.error('Reddit API error:', response.status);
-      return [];
-    }
+    if (!response.ok) return [];
 
-    const data: RedditSearchResponse = await response.json();
+    const data: { data: { children: RedditPost[] } } = await response.json();
 
     return data.data.children
-      .filter((post) => post.data.title)
+      .filter((post) => post.data.selftext && post.data.selftext.length > 50)
       .map((post) => ({
         title: post.data.title,
-        text: post.data.selftext || '',
+        text: post.data.selftext,
         url: `https://reddit.com${post.data.permalink}`,
         source: 'reddit' as const,
       }));

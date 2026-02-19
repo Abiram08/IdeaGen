@@ -1,19 +1,15 @@
 'use client';
 
-import { ExtractedIdea } from '@/types/idea';
-import { TechBadgeList } from './TechBadge';
-import { ExternalLink, Lightbulb, ArrowRight } from 'lucide-react';
-
-interface IdeaPickCardProps {
-  idea: ExtractedIdea;
-  onSelect: (idea: ExtractedIdea) => void;
-}
+import { useEffect, useState } from 'react';
+import { ExtractedIdea, PROJECT_TYPE_CONFIG, ProjectType } from '@/types/idea';
+import { TechBadge } from './TechBadge';
+import { Bookmark, BookmarkCheck, ArrowRight, ExternalLink, Lightbulb } from 'lucide-react';
 
 const sourceBadgeColors: Record<string, string> = {
-  reddit: 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300',
-  hackernews: 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300',
-  devto: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300',
-  devpost: 'bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300',
+  reddit: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+  hackernews: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  devto: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
+  devpost: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
 };
 
 const sourceLabels: Record<string, string> = {
@@ -23,82 +19,126 @@ const sourceLabels: Record<string, string> = {
   devpost: 'Devpost',
 };
 
-export function IdeaPickCard({ idea, onSelect }: IdeaPickCardProps) {
+interface IdeaPickCardProps {
+  idea: ExtractedIdea;
+  index: number;
+  onSelect: () => void;
+  onBookmark: () => void;
+  isBookmarked: boolean;
+}
+
+export function IdeaPickCard({ idea, index, onSelect, onBookmark, isBookmarked }: IdeaPickCardProps) {
+  const [projectType, setProjectType] = useState<ProjectType | null>(null);
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem('ideagenProjectType') as ProjectType | null;
+    if (stored && stored in PROJECT_TYPE_CONFIG) setProjectType(stored);
+  }, []);
+
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg transition-shadow duration-200 overflow-hidden">
+    <div className="glass-card-interactive rounded-2xl overflow-hidden flex flex-col fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
       {/* Header */}
-      <div className="p-6 pb-4">
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <h3 className="text-xl font-semibold text-slate-900 dark:text-white line-clamp-2">
-            {idea.title}
-          </h3>
-          <span
-            className={`flex-shrink-0 px-2.5 py-1 rounded-full text-xs font-medium ${
-              sourceBadgeColors[idea.source_platform] || sourceBadgeColors.hackernews
-            }`}
-          >
-            {sourceLabels[idea.source_platform] || idea.source_platform}
-          </span>
+      <div className="p-6 pb-0">
+        <div className="flex items-start justify-between gap-3 mb-1">
+          <span className="text-xs font-mono text-zinc-500">#{index + 1}</span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={(e) => { e.stopPropagation(); onBookmark(); }}
+              className={`p-1.5 rounded-lg transition-all ${
+                isBookmarked
+                  ? 'bg-[#07D160]/20 text-[#07D160]'
+                  : 'bg-white/5 text-zinc-400 hover:text-[#07D160] hover:bg-[#07D160]/10'
+              }`}
+              title={isBookmarked ? 'Remove bookmark' : 'Bookmark idea'}
+            >
+              {isBookmarked ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
+            </button>
+            <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${sourceBadgeColors[idea.source_platform] || 'bg-purple-500/20 text-purple-400 border-purple-500/30'}`}>
+              {sourceLabels[idea.source_platform] || idea.source_platform}
+            </span>
+            {idea.origin === 'community' && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40">
+                From Community
+              </span>
+            )}
+            {idea.origin === 'ai-generated' && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                AI Generated
+              </span>
+            )}
+            {projectType && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-300 border border-green-500/40">
+                {PROJECT_TYPE_CONFIG[projectType].icon} {PROJECT_TYPE_CONFIG[projectType].label}
+              </span>
+            )}
+          </div>
         </div>
-
-        {/* Problem Statement */}
-        <div className="mb-4">
-          <h4 className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
-            Problem
-          </h4>
-          <p className="text-sm text-slate-700 dark:text-slate-300 line-clamp-3">
-            {idea.problem}
-          </p>
-        </div>
-
-        {/* Concept */}
-        <div className="mb-4">
-          <h4 className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
-            Solution Concept
-          </h4>
-          <p className="text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
-            {idea.concept}
-          </p>
-        </div>
-
-        {/* Tech Stack */}
-        <div className="mb-4">
-          <h4 className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
-            Suggested Tech
-          </h4>
-          <TechBadgeList techs={idea.rough_tech} maxDisplay={4} />
-        </div>
-
-        {/* Why Interesting */}
-        <div className="flex items-start gap-2 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-          <Lightbulb className="w-4 h-4 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-yellow-800 dark:text-yellow-200">
-            {idea.why_interesting}
-          </p>
-        </div>
+        <h3 className="text-lg font-bold text-white mt-2">{idea.title}</h3>
       </div>
 
-      {/* Footer */}
-      <div className="mt-auto p-6 pt-0 space-y-3">
-        {idea.source_url && idea.source_url !== '#' && (
-          <a
-            href={idea.source_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
-          >
-            <ExternalLink className="w-3 h-3" />
-            <span>View source</span>
-          </a>
+      {/* Body */}
+      <div className="p-6 pt-4 flex-1 flex flex-col">
+        <div className="mb-3">
+          <span className="text-xs font-medium text-[#07D160] uppercase tracking-wider">Problem</span>
+          <p className="text-sm text-zinc-300 mt-1 line-clamp-3">{idea.problem}</p>
+        </div>
+
+        <div className="mb-3">
+          <span className="text-xs font-medium text-[#07D160] uppercase tracking-wider">Concept</span>
+          <p className="text-sm text-zinc-300 mt-1 line-clamp-2">{idea.concept}</p>
+        </div>
+
+        <div className="mb-3">
+          <span className="text-xs font-medium text-[#07D160] uppercase tracking-wider block mb-1.5">Tech</span>
+          <div className="flex flex-wrap gap-1.5">
+            {idea.rough_tech.slice(0, 5).map((tech, i) => (
+              <TechBadge key={i} label={tech} />
+            ))}
+          </div>
+        </div>
+
+        {idea.suggested_features?.length > 0 && (
+          <div className="mb-3">
+            <span className="text-xs font-medium text-[#07D160] uppercase tracking-wider block mb-1.5">Features</span>
+            <ul className="space-y-1">
+              {idea.suggested_features.slice(0, 5).map((f, i) => (
+                <li key={i} className="text-xs text-zinc-400 flex items-center gap-1.5">
+                  <span className="text-[#07D160]">+</span> {f}
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
 
-        <button
-          onClick={() => onSelect(idea)}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-        >
-          <span>Explore This Idea</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+        {/* Why interesting */}
+        <div className="mt-auto mb-4">
+          <div className="flex items-start gap-2 p-3 rounded-xl bg-[#07D160]/10 border border-[#07D160]/20">
+            <Lightbulb className="w-4 h-4 text-[#07D160] flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-green-200">{idea.why_interesting}</p>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="mt-auto pt-4 border-t border-white/5 space-y-3">
+          {idea.origin === 'community' && idea.source_url && idea.source_url !== '#' && (
+            <a
+              href={idea.source_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-[#07D160] transition-colors"
+            >
+              <ExternalLink className="w-3 h-3" />
+              <span>View original ↗</span>
+            </a>
+          )}
+          <button
+            onClick={onSelect}
+            className="w-full glow-button flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium group"
+          >
+            <span>Explore This Idea</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
       </div>
     </div>
   );

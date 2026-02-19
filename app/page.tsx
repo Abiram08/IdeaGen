@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Sparkles, ArrowRight, Globe, Brain, Zap, Rocket, ChevronRight, Library } from 'lucide-react';
+import { UserMenu } from '@/components/auth/UserMenu';
 
 export default function HomePage() {
   return (
@@ -17,7 +18,7 @@ export default function HomePage() {
             </div>
             <span className="text-xl font-bold text-white">IdeaGen</span>
           </div>
-          
+
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center gap-8">
             <Link href="/ideavault" className="flex items-center gap-2 text-gray-300 hover:text-green-400 transition-colors">
@@ -29,14 +30,17 @@ export default function HomePage() {
               Generate
             </Link>
           </nav>
-          
-          <Link
-            href="/generate"
-            className="glow-button px-5 py-2.5 rounded-full font-medium text-sm flex items-center gap-2"
-          >
-            Get Started
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/generate"
+              className="glow-button px-5 py-2.5 rounded-full font-medium text-sm flex items-center gap-2"
+            >
+              Get Started
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <UserMenu />
+          </div>
         </div>
       </header>
 
@@ -44,9 +48,9 @@ export default function HomePage() {
       <section className="relative z-10 px-6 pt-20 pb-32">
         <div className="max-w-5xl mx-auto text-center">
           <div className="fade-in-up">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-green-400 mb-8">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-green-400 mb-8">
               <Zap className="w-4 h-4" />
-              Powered by Claude & Grok AI
+              Powered by 2 AI Models
             </span>
           </div>
           
@@ -90,7 +94,7 @@ export default function HomePage() {
                     You think it, <span className="text-green-400">IdeaGen</span> helps make it happen
                   </h3>
                   <p className="text-gray-400 leading-relaxed">
-                    Discover trending project ideas from Reddit, Hacker News, Dev.to, and Devpost. 
+                    Discover trending project ideas from Hacker News, Dev.to, and Devpost.
                     Refine them with AI-powered brainstorming, then get a complete roadmap to build.
                   </p>
                 </div>
@@ -127,21 +131,21 @@ export default function HomePage() {
                 icon: Globe,
                 step: '01',
                 title: 'Fetch Content',
-                description: 'We scan Reddit, Hacker News, Dev.to, and Devpost for trending topics in your domain.',
+                description: 'We scan trending developer communities for real problems and opportunities in your domain.',
                 color: 'from-green-500 to-green-600'
               },
               {
                 icon: Brain,
                 step: '02', 
                 title: 'Extract Ideas',
-                description: "Claude AI analyzes the content and extracts 3 distinct, buildable project ideas.",
+                description: "Gemini AI analyzes the content and extracts 3 distinct, buildable project ideas.",
                 color: 'from-green-400 to-green-500'
               },
               {
                 icon: Zap,
                 step: '03',
                 title: 'Brainstorm',
-                description: 'Chat with Grok to refine your idea – adjust tech stack, features, and scope in real-time.',
+                description: 'Chat with Groq to refine your idea – adjust tech stack, features, and scope in real-time.',
                 color: 'from-emerald-500 to-emerald-600'
               },
               {
@@ -177,7 +181,7 @@ export default function HomePage() {
               Powered by the best sources
             </h3>
             <div className="flex flex-wrap items-center justify-center gap-8">
-              {['Reddit', 'Hacker News', 'Dev.to', 'Devpost'].map((source, index) => (
+              {['Hacker News', 'Dev.to', 'Devpost'].map((source, index) => (
                 <div key={index} className="flex items-center gap-2 text-gray-300">
                   <div className="w-2 h-2 rounded-full bg-green-500" />
                   <span className="font-medium">{source}</span>
@@ -219,7 +223,7 @@ export default function HomePage() {
             <span className="font-semibold text-white">IdeaGen</span>
           </div>
           <p className="text-sm text-gray-500">
-            Built with Next.js, Claude AI, and Grok
+            Built with Next.js, Gemini & Groq
           </p>
         </div>
       </footer>
