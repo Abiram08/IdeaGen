@@ -5,3 +5,4 @@ export { RoadmapCard } from './RoadmapCard';
 export { TechBadge, TechBadgeList } from './TechBadge';
 export { FeatureList, FeatureListReadOnly } from './FeatureList';
 export { WeekTimeline } from './WeekTimeline';
+export { IdeaVault } from './IdeaVault';

@@ -1,0 +1,1880 @@
+{
+  "meta": {
+    "version": "1.0",
+    "section": "student",
+    "total_ideas": 160,
+    "generated_for": "IdeaVault — Students & Hackathon Participants",
+    "tags_legend": {
+      "hackathon-ready": "Buildable in 24–48 hours, visually impressive, judge-friendly",
+      "portfolio-worthy": "Bootcamp learners, CS students applying for jobs",
+      "startup-potential": "Founders, people wanting to eventually monetize",
+      "beginner-friendly": "First-time builders, bootcamp week 1–8 students",
+      "impressive-to-judges": "Hackathon participants who want to win, not just participate",
+      "research-backed": "Academic students who need citations and literature support",
+      "codecrafters": "Inspired by CodeCrafters-style build-your-own challenges",
+      "bootcamp-project": "Ideal capstone or mid-term project for coding bootcamp students"
+    }
+  },
+  "ideas": [
+    {
+      "id": "stu_001",
+      "title": "Build Your Own Git (Mini Version)",
+      "problem": "Students learning version control don't understand what happens under the hood. Tutorials show commands but not internals.",
+      "concept": "A CLI tool that implements core Git commands (init, add, commit, log) from scratch using Node.js or Python.",
+      "target_user": "CS student or bootcamp grad wanting to deeply understand version control",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy", "impressive-to-judges"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Python", "File I/O", "SHA1 Hashing", "CLI"],
+      "difficulty_details": {
+        "concepts": ["blob/tree objects", "commit DAG", "HEAD pointer", "index file"],
+        "prerequisite": "Basic Python, understanding of file systems"
+      }
+    },
+    {
+      "id": "stu_002",
+      "title": "Build Your Own HTTP Server",
+      "problem": "Most devs use Express or FastAPI but have no idea how HTTP actually works, making debugging mysterious.",
+      "concept": "A raw TCP-based HTTP/1.1 server that handles GET/POST, routing, headers, and static file serving — no framework.",
+      "target_user": "Backend bootcamp student or self-taught dev wanting to level up",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy", "bootcamp-project"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Python", "Sockets", "TCP/IP", "HTTP Protocol"],
+      "difficulty_details": {
+        "concepts": ["TCP handshake", "HTTP request parsing", "response headers", "MIME types"],
+        "prerequisite": "Networking basics, Python"
+      }
+    },
+    {
+      "id": "stu_003",
+      "title": "Build Your Own Redis",
+      "problem": "Developers use Redis daily for caching but treat it as a black box, leading to misuse and bad architecture decisions.",
+      "concept": "An in-memory key-value store with RESP protocol support, TTL expiry, and persistence — built from scratch.",
+      "target_user": "Intermediate backend developer preparing for senior-level interviews",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "advanced",
+      "time_to_build": "2_weeks",
+      "tags": ["codecrafters", "portfolio-worthy", "impressive-to-judges"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Go", "TCP Sockets", "RESP Protocol", "LRU Cache"],
+      "difficulty_details": {
+        "concepts": ["event loop", "RESP serialization", "expiry heap", "RDB snapshots"],
+        "prerequisite": "Intermediate Go or Python, data structures"
+      }
+    },
+    {
+      "id": "stu_004",
+      "title": "Build Your Own SQLite",
+      "problem": "Database internals — B-trees, page management, query execution — are never taught in bootcamps but come up in every senior interview.",
+      "concept": "A file-backed relational database engine that supports basic SQL (SELECT, INSERT, CREATE TABLE) using a B-tree storage engine.",
+      "target_user": "Advanced CS student or bootcamp grad aiming for backend engineering roles",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "advanced",
+      "time_to_build": "1_month",
+      "tags": ["codecrafters", "portfolio-worthy", "impressive-to-judges", "research-backed"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Rust", "B-Tree", "Binary File I/O", "SQL Parser"],
+      "difficulty_details": {
+        "concepts": ["page-based storage", "B-tree splits", "query planner", "WAL logging"],
+        "prerequisite": "Strong algorithms knowledge, systems programming"
+      }
+    },
+    {
+      "id": "stu_005",
+      "title": "Build Your Own Docker (Container Runtime)",
+      "problem": "Developers use Docker every day but cannot explain namespaces or cgroups, leading to poor security and infra decisions.",
+      "concept": "A minimal container runtime using Linux namespaces and cgroups to isolate processes — no Docker engine.",
+      "target_user": "DevOps-curious CS student or platform engineering aspirant",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "advanced",
+      "time_to_build": "2_weeks",
+      "tags": ["codecrafters", "portfolio-worthy", "impressive-to-judges"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Go", "Linux Namespaces", "cgroups", "chroot", "UnionFS"],
+      "difficulty_details": {
+        "concepts": ["PID/net/mount namespaces", "seccomp filters", "overlay filesystem", "OCI spec"],
+        "prerequisite": "Linux internals, Go or C"
+      }
+    },
+    {
+      "id": "stu_006",
+      "title": "Build Your Own DNS Resolver",
+      "problem": "Every request on the internet depends on DNS, yet most developers can't explain how a recursive resolver works.",
+      "concept": "A recursive DNS resolver that queries root, TLD, and authoritative servers — with local caching and TTL support.",
+      "target_user": "Networking-curious bootcamp student or junior SRE/DevOps learner",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Python", "UDP Sockets", "DNS Wire Format", "Binary Parsing"],
+      "difficulty_details": {
+        "concepts": ["DNS message format", "recursion vs iteration", "NXDOMAIN", "TTL cache"],
+        "prerequisite": "Networking basics, Python"
+      }
+    },
+    {
+      "id": "stu_007",
+      "title": "Build Your Own BitTorrent Client",
+      "problem": "P2P networking is poorly understood by most students, yet it's foundational for distributed systems and blockchain understanding.",
+      "concept": "A working BitTorrent client that can parse .torrent files, connect to trackers, and download real files.",
+      "target_user": "Intermediate CS student interested in distributed systems or networking",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "advanced",
+      "time_to_build": "2_weeks",
+      "tags": ["codecrafters", "portfolio-worthy", "impressive-to-judges"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Python", "Bencode", "Tracker HTTP API", "TCP Sockets"],
+      "difficulty_details": {
+        "concepts": ["bencode", "info-hash", "peer wire protocol", "piece verification"],
+        "prerequisite": "Networking, Python, SHA1 hashing"
+      }
+    },
+    {
+      "id": "stu_008",
+      "title": "Build Your Own Interpreter (Lox Language)",
+      "problem": "Most developers use languages without knowing how parsers, ASTs, or interpreters work — making them less effective at debugging.",
+      "concept": "A tree-walking interpreter for a small dynamic language (like Lox from Crafting Interpreters), complete with scoping and functions.",
+      "target_user": "CS student or self-taught dev interested in compilers and language design",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "advanced",
+      "time_to_build": "1_month",
+      "tags": ["codecrafters", "portfolio-worthy", "impressive-to-judges", "research-backed"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["TypeScript", "AST", "Lexer", "Parser", "Scope Chains"],
+      "difficulty_details": {
+        "concepts": ["scanning", "Pratt parsing", "environments", "closures", "resolver pass"],
+        "prerequisite": "Strong programming fundamentals, any OOP language"
+      }
+    },
+    {
+      "id": "stu_009",
+      "title": "Build Your Own Shell (Bash Clone)",
+      "problem": "Students use the terminal daily but cannot explain how shells execute commands, handle pipes, or manage processes.",
+      "concept": "A Unix shell that supports commands, pipes, redirection, environment variables, and basic built-ins like cd and exit.",
+      "target_user": "Systems-curious CS student or backend bootcamp learner",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["C", "fork()", "execvp()", "pipes", "readline"],
+      "difficulty_details": {
+        "concepts": ["fork-exec model", "file descriptor duplication", "signal handling", "tokenizer"],
+        "prerequisite": "C basics, Unix system calls"
+      }
+    },
+    {
+      "id": "stu_010",
+      "title": "Build Your Own WebSocket Server",
+      "problem": "Real-time apps are everywhere but most bootcamp graduates don't understand the upgrade handshake or framing protocol under WebSocket.",
+      "concept": "A WebSocket server from raw TCP that handles the HTTP upgrade, frame masking/unmasking, and bi-directional messaging.",
+      "target_user": "Full-stack bootcamp student who has built chat apps using libraries and wants to understand the layer beneath",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy", "bootcamp-project"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Node.js", "TCP Sockets", "Base64", "SHA1", "Binary Framing"],
+      "difficulty_details": {
+        "concepts": ["HTTP upgrade handshake", "Sec-WebSocket-Accept", "frame opcode", "masking key"],
+        "prerequisite": "HTTP knowledge, JavaScript"
+      }
+    },
+    {
+      "id": "stu_011",
+      "title": "AI-Powered Study Flashcard Generator",
+      "problem": "Students spend hours turning lecture notes or PDFs into flashcards. Most give up before studying effectively.",
+      "concept": "Upload a PDF or paste notes → AI generates Anki-style Q&A flashcards with spaced repetition scheduling built in.",
+      "target_user": "University student preparing for exams",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "bootcamp-project", "beginner-friendly", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "OpenAI API", "PDF.js", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["PDF text extraction", "prompt engineering", "spaced repetition algorithm"],
+        "prerequisite": "Basic React, API calls"
+      }
+    },
+    {
+      "id": "stu_012",
+      "title": "GitHub Streak Accountability Bot",
+      "problem": "Bootcamp students lose consistency after graduating — they stop coding and their GitHub goes dark, hurting job prospects.",
+      "concept": "A Telegram/Discord bot that tracks your GitHub contributions daily and sends shame/praise messages to keep your streak alive.",
+      "target_user": "Bootcamp grad in job search mode",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["bootcamp-project", "beginner-friendly", "portfolio-worthy", "hackathon-ready"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Python", "GitHub API", "Telegram Bot API", "Cron Jobs"],
+      "difficulty_details": {
+        "concepts": ["GitHub GraphQL API", "cron scheduling", "bot webhooks"],
+        "prerequisite": "Python basics, REST APIs"
+      }
+    },
+    {
+      "id": "stu_013",
+      "title": "Resume Bullet Point Enhancer",
+      "problem": "Bootcamp grads write weak resume bullet points ('worked on a website') that fail to convey impact and get screened out by ATS.",
+      "concept": "Paste your weak bullet point → AI rewrites it in the STAR format with metrics, action verbs, and tech keywords.",
+      "target_user": "Bootcamp graduate or CS student applying to their first job",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["bootcamp-project", "beginner-friendly", "hackathon-ready", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "OpenAI API", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["prompt chaining", "STAR format", "streaming responses"],
+        "prerequisite": "Basic React or HTML/JS"
+      }
+    },
+    {
+      "id": "stu_014",
+      "title": "Peer Code Review Simulator",
+      "problem": "Bootcamp students practice coding alone but never get realistic feedback like they'd receive in a real engineering team.",
+      "concept": "Submit a GitHub PR link → AI reviews it like a senior engineer: comments on naming, logic, performance, and style.",
+      "target_user": "Bootcamp student or junior developer preparing for their first code review",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["bootcamp-project", "portfolio-worthy", "hackathon-ready"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Next.js", "GitHub API", "Claude API", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["GitHub Diff API", "prompt engineering for code review", "PR parsing"],
+        "prerequisite": "Next.js, REST APIs"
+      }
+    },
+    {
+      "id": "stu_015",
+      "title": "LeetCode Progress Visualizer",
+      "problem": "Students grinding LeetCode have no way to visualize their weak topics, progress velocity, or which patterns they haven't mastered.",
+      "concept": "Connect LeetCode account → dashboard shows topic heatmap, solve velocity, weak spots, and next recommended problem.",
+      "target_user": "CS student or bootcamp grad in interview prep mode",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["bootcamp-project", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "LeetCode GraphQL API", "D3.js", "Firebase"],
+      "difficulty_details": {
+        "concepts": ["GraphQL queries", "data visualization", "heatmap charts"],
+        "prerequisite": "React, basic data viz"
+      }
+    },
+    {
+      "id": "stu_016",
+      "title": "Bootcamp Project Idea Generator",
+      "problem": "When told to 'build a portfolio project', bootcamp students go blank or build yet another to-do list that impresses no one.",
+      "concept": "Answer 5 questions about your tech stack and interests → AI suggests 3 specific, buildable, and impressive project ideas.",
+      "target_user": "Bootcamp student assigned a capstone project",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["bootcamp-project", "beginner-friendly", "hackathon-ready"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "OpenAI API", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["multi-step forms", "prompt engineering"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_017",
+      "title": "Blind Mock Interview Platform",
+      "problem": "Students practice interviews alone or with friends who are too nice. They never get honest, pressure-tested feedback.",
+      "concept": "AI interviewer that conducts real-time voice/text technical and behavioral mock interviews and gives brutally honest scores.",
+      "target_user": "CS student or bootcamp grad 1–3 months before job hunting",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "2_weeks",
+      "tags": ["bootcamp-project", "portfolio-worthy", "startup-potential"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Next.js", "OpenAI API", "WebSpeech API", "Firebase", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["speech recognition", "conversation state", "scoring rubrics"],
+        "prerequisite": "Next.js, APIs, basic state management"
+      }
+    },
+    {
+      "id": "stu_018",
+      "title": "Real-Time Collaborative Code Editor",
+      "problem": "Teams working on coding challenges together have no lightweight shared editor — Replit is too heavy, Google Docs has no syntax.",
+      "concept": "A minimal browser-based code editor with real-time collaborative editing, syntax highlighting, and room-based sharing.",
+      "target_user": "CS students doing pair programming or hackathon participants",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "intermediate",
+      "time_to_build": "2_weeks",
+      "tags": ["hackathon-ready", "portfolio-worthy", "impressive-to-judges", "bootcamp-project"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Monaco Editor", "Socket.io", "Node.js", "Y.js (CRDT)"],
+      "difficulty_details": {
+        "concepts": ["CRDTs", "operational transforms", "WebSockets", "code editor APIs"],
+        "prerequisite": "React, Node.js, basic real-time concepts"
+      }
+    },
+    {
+      "id": "stu_019",
+      "title": "DevLog — Daily Learning Journal for Coders",
+      "problem": "Bootcamp students learn fast but retain little. There's no structured, code-friendly space to reflect on what they've built each day.",
+      "concept": "A journaling app where each entry auto-extracts code snippets, links, and key learnings and organizes them into a searchable timeline.",
+      "target_user": "Bootcamp student in weeks 1–16 of learning",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["bootcamp-project", "beginner-friendly", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Firebase", "PrismJS", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["markdown rendering", "code syntax highlighting", "CRUD with Firestore"],
+        "prerequisite": "Basic React, Firebase"
+      }
+    },
+    {
+      "id": "stu_020",
+      "title": "Stack Overflow Question Quality Checker",
+      "problem": "Bootcamp students post low-quality questions on Stack Overflow and get downvoted, discouraging them from seeking help.",
+      "concept": "Paste your draft question → AI scores it on clarity, reproducibility, and completeness and suggests improvements before posting.",
+      "target_user": "Bootcamp student who is new to the developer community",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["bootcamp-project", "beginner-friendly", "hackathon-ready"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "OpenAI API"],
+      "difficulty_details": {
+        "concepts": ["prompt engineering", "scoring logic"],
+        "prerequisite": "Basic React or vanilla JS"
+      }
+    },
+    {
+      "id": "stu_021",
+      "title": "Campus Lost & Found App",
+      "problem": "College campuses lose hundreds of items per week. The current system is a whiteboard or email nobody checks.",
+      "concept": "A geo-tagged lost and found board where students post photos of found items, search by category, and get matched via AI image similarity.",
+      "target_user": "University students on a campus of 5,000+ people",
+      "section": "student",
+      "domain": "social",
+      "skill_level": "beginner",
+      "time_to_build": "2_weeks",
+      "tags": ["hackathon-ready", "portfolio-worthy", "beginner-friendly"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React Native", "Firebase", "Google Vision API", "Expo"],
+      "difficulty_details": {
+        "concepts": ["image upload", "geo-location", "push notifications", "similarity search"],
+        "prerequisite": "React Native basics"
+      }
+    },
+    {
+      "id": "stu_022",
+      "title": "Dormitory Noise Complaint Tracker",
+      "problem": "College students in dorms have no structured way to report noise issues — it becomes personal and escalates unnecessarily.",
+      "concept": "An anonymous, time-stamped complaint log for each dorm floor where RAs can see patterns and respond with context.",
+      "target_user": "College students in on-campus housing",
+      "section": "student",
+      "domain": "social",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["beginner-friendly", "bootcamp-project", "portfolio-worthy"],
+      "wow_factor": 2,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Firebase", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["anonymous auth", "time-series data", "role-based access"],
+        "prerequisite": "Basic React, Firebase"
+      }
+    },
+    {
+      "id": "stu_023",
+      "title": "Student Freelance Marketplace (Campus Edition)",
+      "problem": "Students need income and have skills but don't know how to find clients. Fiverr feels impersonal and unsafe for on-campus work.",
+      "concept": "A campus-only freelance board where students offer skills (design, tutoring, coding) and hire each other — verified by .edu email.",
+      "target_user": "College students looking for peer-to-peer micro-gigs",
+      "section": "student",
+      "domain": "social",
+      "skill_level": "intermediate",
+      "time_to_build": "2_weeks",
+      "tags": ["portfolio-worthy", "hackathon-ready", "startup-potential"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Next.js", "Supabase", "Stripe", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["edu email verification", "payment rails", "messaging system"],
+        "prerequisite": "Next.js, basic auth flows"
+      }
+    },
+    {
+      "id": "stu_024",
+      "title": "Exam Countdown Dashboard",
+      "problem": "Students panic near exam week because they have no high-level view of when everything is due and how prepared they are.",
+      "concept": "Add your courses and exam dates → dashboard shows countdown timers, prep percentage, and daily study target calculator.",
+      "target_user": "University student juggling 4–6 courses",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["beginner-friendly", "bootcamp-project", "hackathon-ready"],
+      "wow_factor": 2,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "localStorage", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["date math", "progress tracking", "local state persistence"],
+        "prerequisite": "Basic JavaScript or React"
+      }
+    },
+    {
+      "id": "stu_025",
+      "title": "Group Project Manager for Students",
+      "problem": "Student group projects collapse into chaos — nobody knows who's doing what, deadlines slip, and one person ends up doing everything.",
+      "concept": "A lightweight task board built specifically for student groups with auto-deadline reminders, contribution tracking, and a blame radar.",
+      "target_user": "University students working on 3–6 person group projects",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["hackathon-ready", "portfolio-worthy", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Firebase", "Tailwind CSS", "Email.js"],
+      "difficulty_details": {
+        "concepts": ["real-time Firestore", "invite system", "contribution analytics"],
+        "prerequisite": "React, Firebase basics"
+      }
+    },
+    {
+      "id": "stu_026",
+      "title": "Textbook Price Comparison Tool",
+      "problem": "College textbooks cost $200–$400 each. Students don't know the cheapest legitimate source (Amazon, Chegg, library, PDF) for each one.",
+      "concept": "Enter a course or ISBN → aggregates prices from Amazon, AbeBooks, Chegg, VitalSource, and open access sources and ranks them.",
+      "target_user": "College student at the start of a semester",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["hackathon-ready", "beginner-friendly", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Python", "BeautifulSoup", "FastAPI", "React"],
+      "difficulty_details": {
+        "concepts": ["web scraping", "REST API", "price comparison logic"],
+        "prerequisite": "Python basics, HTML/CSS"
+      }
+    },
+    {
+      "id": "stu_027",
+      "title": "Mood-Based Study Music Generator",
+      "problem": "Students spend 10–15 minutes choosing study music on Spotify instead of actually studying.",
+      "concept": "Tell it your mood, subject, and desired focus level → generates a custom lo-fi / ambient playlist with Spotify or YouTube embeds.",
+      "target_user": "University student who listens to music while studying",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Spotify API", "OpenAI API", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["Spotify OAuth", "playlist generation", "mood-to-genre mapping"],
+        "prerequisite": "JavaScript basics, APIs"
+      }
+    },
+    {
+      "id": "stu_028",
+      "title": "Hackathon Team Finder",
+      "problem": "Solo students who want to compete in hackathons have no structured way to find complementary teammates before event day.",
+      "concept": "Create a profile with your skills, time zone, and preferred hackathon types — get matched with teammates before the event.",
+      "target_user": "University student or bootcamp grad who wants to compete in online hackathons",
+      "section": "student",
+      "domain": "social",
+      "skill_level": "intermediate",
+      "time_to_build": "2_weeks",
+      "tags": ["hackathon-ready", "portfolio-worthy", "startup-potential"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Next.js", "Supabase", "Tailwind CSS", "Devpost API"],
+      "difficulty_details": {
+        "concepts": ["skill-based matching algorithm", "profile system", "event browsing"],
+        "prerequisite": "Next.js, Supabase auth"
+      }
+    },
+    {
+      "id": "stu_029",
+      "title": "Open Source Contribution Finder for Beginners",
+      "problem": "Bootcamp grads want to contribute to open source but are overwhelmed — most 'good first issue' lists are outdated or too hard.",
+      "concept": "Enter your stack and skill level → curated, verified list of open issues that are genuinely beginner-friendly and recently active.",
+      "target_user": "Bootcamp grad or CS student wanting their first open source contribution",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["bootcamp-project", "beginner-friendly", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "GitHub GraphQL API", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["GitHub API filtering", "label parsing", "activity timestamps"],
+        "prerequisite": "Basic React, REST/GraphQL"
+      }
+    },
+    {
+      "id": "stu_030",
+      "title": "AI Lecture Summarizer with Action Items",
+      "problem": "Students sit in 90-minute lectures and leave with 8 pages of notes but no clarity on what actually matters or what to do next.",
+      "concept": "Upload a lecture recording or transcript → AI outputs a structured summary, key concepts, and specific study action items.",
+      "target_user": "University student in STEM or business courses",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "bootcamp-project", "beginner-friendly"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "OpenAI Whisper API", "Claude API", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["audio transcription", "summarization prompting", "structured output"],
+        "prerequisite": "Basic JavaScript, API calls"
+      }
+    },
+    {
+      "id": "stu_031",
+      "title": "Student Budget Tracker with Guilt Score",
+      "problem": "College students have no visibility into spending patterns and run out of money mid-semester without understanding why.",
+      "concept": "Log daily spending in categories → weekly guilt score shows where you overspent vs. your declared student budget with gentle nudges.",
+      "target_user": "College student living on a tight budget",
+      "section": "student",
+      "domain": "fintech",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["beginner-friendly", "bootcamp-project", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Firebase", "Chart.js", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["budget categories", "spending analytics", "chart visualization"],
+        "prerequisite": "Basic React, Firebase"
+      }
+    },
+    {
+      "id": "stu_032",
+      "title": "Internship Cold Email Generator",
+      "problem": "CS students want to cold email companies for internships but have no idea how to write a compelling outreach message.",
+      "concept": "Enter company name, role, and your background → AI generates a personalized, non-cringe cold email with a suggested subject line.",
+      "target_user": "CS student or bootcamp grad in job/internship search",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["beginner-friendly", "hackathon-ready", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "OpenAI API"],
+      "difficulty_details": {
+        "concepts": ["prompt engineering", "form handling"],
+        "prerequisite": "Basic React or vanilla JS"
+      }
+    },
+    {
+      "id": "stu_033",
+      "title": "Pomodoro Timer with Context Locking",
+      "problem": "Students start a Pomodoro session and then immediately get distracted by switching tasks — the timer runs but nothing gets done.",
+      "concept": "Set a focus task before starting the timer — during the session, the tool tracks tab switches and penalizes distraction with a visible shame counter.",
+      "target_user": "Student struggling with focus during self-study sessions",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Chrome Extension API", "localStorage"],
+      "difficulty_details": {
+        "concepts": ["browser focus events", "visibility API", "timer state"],
+        "prerequisite": "JavaScript basics"
+      }
+    },
+    {
+      "id": "stu_034",
+      "title": "Coding Concept Explainer (Like I'm 10)",
+      "problem": "Students read documentation or Stack Overflow answers and still don't understand the concept because explanations assume prior knowledge.",
+      "concept": "Paste any coding concept or error message → AI explains it in three levels: like you're 10, like you're a student, and like you're a pro.",
+      "target_user": "Beginner bootcamp student or self-taught programmer",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["beginner-friendly", "hackathon-ready", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "OpenAI API", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["multi-level prompt engineering", "streaming responses"],
+        "prerequisite": "Basic React or HTML/JS"
+      }
+    },
+    {
+      "id": "stu_035",
+      "title": "Final Year Project Scope Validator",
+      "problem": "Students pick final year project ideas that are either too big (unfinishable) or too small (not accepted) and only find out mid-way.",
+      "concept": "Describe your project idea → AI evaluates scope, feasibility, originality, and academic rigor and suggests scope adjustments.",
+      "target_user": "Final-year CS or engineering student planning their capstone",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["bootcamp-project", "beginner-friendly", "hackathon-ready"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Claude API"],
+      "difficulty_details": {
+        "concepts": ["structured evaluation prompting"],
+        "prerequisite": "Basic JavaScript"
+      }
+    },
+    {
+      "id": "stu_036",
+      "title": "Micro SaaS Landing Page Builder for Students",
+      "problem": "Students with project ideas want to validate demand before building, but creating a landing page takes too long with no-code tools.",
+      "concept": "Answer 5 questions about your project → AI generates a full HTML landing page with copy, features, CTA, and waitlist form in 30 seconds.",
+      "target_user": "CS student or bootcamp grad with a project idea they want to test",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "intermediate",
+      "time_to_build": "2_weeks",
+      "tags": ["portfolio-worthy", "startup-potential", "impressive-to-judges"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Next.js", "Claude API", "Tailwind CSS", "Vercel"],
+      "difficulty_details": {
+        "concepts": ["code generation prompting", "HTML rendering from LLM output", "export to file"],
+        "prerequisite": "Next.js, prompt engineering"
+      }
+    },
+    {
+      "id": "stu_037",
+      "title": "Personal API Rate Limit Visualizer",
+      "problem": "Developers using free-tier APIs (OpenAI, GitHub, etc.) hit rate limits unexpectedly and have no dashboard to track their usage.",
+      "concept": "Connect multiple API keys → unified dashboard tracks requests, remaining quota, and predicted overage per day.",
+      "target_user": "Bootcamp student or hackathon participant working with multiple APIs",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["portfolio-worthy", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Node.js", "Chart.js", "Multiple API clients"],
+      "difficulty_details": {
+        "concepts": ["API header parsing", "rate limit tracking", "time series charts"],
+        "prerequisite": "JavaScript, REST APIs"
+      }
+    },
+    {
+      "id": "stu_038",
+      "title": "Coding Challenge Timer with Solution Unlock",
+      "problem": "Students practicing coding challenges give up too early or stay too long — they have no structured hint/unlock system.",
+      "concept": "Set a timer for a coding problem — after 15 minutes, get one hint; after 30, get a partial solution; after 45, see the full walkthrough.",
+      "target_user": "CS student doing structured interview prep",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "localStorage", "Prism.js"],
+      "difficulty_details": {
+        "concepts": ["timer logic", "progressive reveal UI"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_039",
+      "title": "Student Debt Payoff Simulator",
+      "problem": "Student loan borrowers have no intuitive tool to see how extra payments, income growth, or refinancing affect their payoff timeline.",
+      "concept": "Enter your loan details → interactive simulator shows payoff date, total interest paid, and impact of different repayment strategies.",
+      "target_user": "College graduate or final-year student planning post-graduation finances",
+      "section": "student",
+      "domain": "fintech",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["bootcamp-project", "beginner-friendly", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Chart.js", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["amortization math", "interactive charts", "scenario comparison"],
+        "prerequisite": "Basic React, math"
+      }
+    },
+    {
+      "id": "stu_040",
+      "title": "Collaborative Whiteboard for CS Concepts",
+      "problem": "CS students studying data structures and algorithms struggle to visualize concepts like trees, graphs, and sorting together in real time.",
+      "concept": "A digital whiteboard with pre-built CS building blocks (nodes, edges, arrays) — students can draw, animate, and share in real time.",
+      "target_user": "CS student studying with a study group remotely",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "2_weeks",
+      "tags": ["hackathon-ready", "portfolio-worthy", "impressive-to-judges"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Canvas API", "Socket.io", "Excalidraw library"],
+      "difficulty_details": {
+        "concepts": ["canvas drawing", "real-time sync", "shape primitives"],
+        "prerequisite": "React, WebSockets"
+      }
+    },
+    {
+      "id": "stu_041",
+      "title": "Project README Generator",
+      "problem": "Bootcamp students submit GitHub projects with empty or terrible READMEs, making it impossible for recruiters to understand the work.",
+      "concept": "Paste your GitHub repo URL → AI scans the code and auto-generates a professional README with description, setup, tech stack, and screenshots.",
+      "target_user": "Bootcamp student preparing their GitHub portfolio for job applications",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["bootcamp-project", "beginner-friendly", "hackathon-ready", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "GitHub API", "Claude API", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["GitHub repo API", "code context extraction", "markdown generation"],
+        "prerequisite": "Basic JavaScript, API calls"
+      }
+    },
+    {
+      "id": "stu_042",
+      "title": "Dependency Vulnerability Scanner for Student Projects",
+      "problem": "Students submit projects with outdated, vulnerable npm/pip packages and don't know — this looks bad to security-aware recruiters.",
+      "concept": "Paste your package.json or requirements.txt → scans for known CVEs, shows severity, and suggests safe upgrade paths.",
+      "target_user": "Bootcamp student or CS student submitting a portfolio project",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["portfolio-worthy", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Node.js", "npm audit API", "OSV.dev API", "React"],
+      "difficulty_details": {
+        "concepts": ["CVE databases", "package parsing", "severity scoring"],
+        "prerequisite": "Node.js, REST APIs"
+      }
+    },
+    {
+      "id": "stu_043",
+      "title": "Handwriting-to-Notes Digitizer",
+      "problem": "Students take handwritten lecture notes but can't search or share them. Re-typing is time-consuming and OCR apps are expensive.",
+      "concept": "Snap a photo of handwritten notes → AI transcribes, formats, and organizes them into searchable digital notes with topic tags.",
+      "target_user": "University student who takes handwritten notes in class",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React Native", "Google Vision API", "Firebase", "Expo"],
+      "difficulty_details": {
+        "concepts": ["OCR API", "image preprocessing", "structured note formatting"],
+        "prerequisite": "Basic React Native or web"
+      }
+    },
+    {
+      "id": "stu_044",
+      "title": "Lab Partner Matcher",
+      "problem": "In science and engineering courses, students pick lab partners based on who they know, not who shares their availability or goals.",
+      "concept": "Complete a short profile with your schedule, goal, and working style → get matched with compatible lab partners in your course.",
+      "target_user": "STEM university student in lab-heavy courses",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["beginner-friendly", "bootcamp-project", "hackathon-ready"],
+      "wow_factor": 2,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Firebase", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["simple matching algorithm", "availability grids", "course filtering"],
+        "prerequisite": "Basic React, Firebase"
+      }
+    },
+    {
+      "id": "stu_045",
+      "title": "Tech Jargon Decoder Browser Extension",
+      "problem": "Bootcamp students reading documentation or job postings encounter jargon they don't recognize but are too embarrassed to Google.",
+      "concept": "Highlight any technical term on any webpage → popup instantly explains it in plain language with examples.",
+      "target_user": "Bootcamp student or early-career developer browsing docs or job boards",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Chrome Extension API", "OpenAI API", "vanilla JS"],
+      "difficulty_details": {
+        "concepts": ["context menu API", "selected text extraction", "popup UI"],
+        "prerequisite": "Basic HTML/CSS/JS"
+      }
+    },
+    {
+      "id": "stu_046",
+      "title": "Personal Portfolio Score Analyzer",
+      "problem": "Bootcamp graduates post their portfolio site but receive no feedback on whether it's actually recruiter-friendly or not.",
+      "concept": "Enter your portfolio URL → AI analyzes layout, projects, copy, and GitHub links and gives an actionable 1–10 recruiter score.",
+      "target_user": "Bootcamp grad preparing for job applications",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["bootcamp-project", "beginner-friendly", "hackathon-ready"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Claude API", "Puppeteer"],
+      "difficulty_details": {
+        "concepts": ["URL scraping", "AI scoring rubric", "structured feedback output"],
+        "prerequisite": "Node.js, basic AI API usage"
+      }
+    },
+    {
+      "id": "stu_047",
+      "title": "Weekly CS Digest Newsletter Bot",
+      "problem": "Bootcamp students and CS students don't stay current with the tech world, making interviews awkward when asked about recent trends.",
+      "concept": "Subscribe with email → every Sunday you get a personalized 5-minute digest of top CS news, GitHub trending repos, and one paper summary.",
+      "target_user": "CS student or bootcamp grad wanting to stay in the loop without doom-scrolling",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["portfolio-worthy", "bootcamp-project", "startup-potential"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Node.js", "GitHub Trending API", "SendGrid", "HN API", "cron jobs"],
+      "difficulty_details": {
+        "concepts": ["content aggregation", "email templating", "scheduled jobs"],
+        "prerequisite": "Node.js, APIs"
+      }
+    },
+    {
+      "id": "stu_048",
+      "title": "Side Project Graveyard & Revival Tool",
+      "problem": "Students have 5–10 half-built side projects collecting dust. They don't know which ones are worth reviving vs. killing.",
+      "concept": "List your abandoned projects → AI evaluates each on market relevance, effort to complete, and portfolio value — then ranks revival priority.",
+      "target_user": "Student or bootcamp grad with a graveyard of unfinished projects",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "bootcamp-project", "beginner-friendly"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Claude API"],
+      "difficulty_details": {
+        "concepts": ["multi-factor scoring", "list management UI"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_049",
+      "title": "Typing Speed Tracker for Code",
+      "problem": "Most typing tests measure regular English words, not programming syntax — which feels very different and is what developers actually type.",
+      "concept": "Practice typing real code snippets in various languages, track WPM for code specifically, and get weak pattern analysis.",
+      "target_user": "Bootcamp student or junior developer who feels slow when coding",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Tailwind CSS", "localStorage"],
+      "difficulty_details": {
+        "concepts": ["keystroke timing", "WPM calculation", "error tracking"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_050",
+      "title": "Mental Health Check-in Bot for Students",
+      "problem": "University students silently struggle with burnout, anxiety, and stress because mental health resources feel inaccessible or stigmatized.",
+      "concept": "A 2-minute weekly check-in form → tracks mood trends over the semester and surfaces warning patterns before a student hits a wall.",
+      "target_user": "University student dealing with academic pressure",
+      "section": "student",
+      "domain": "health",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["portfolio-worthy", "hackathon-ready", "research-backed"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Firebase", "Chart.js", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["sentiment tracking", "trend charts", "data privacy"],
+        "prerequisite": "Basic React, Firebase"
+      }
+    },
+    {
+      "id": "stu_051",
+      "title": "Event-Sourced To-Do List (Build Your Own Redux)",
+      "problem": "Most students build CRUD apps without understanding event sourcing, immutable state, or command patterns — fundamentals behind real apps.",
+      "concept": "A to-do app whose entire state is derived from an append-only event log — demonstrating event sourcing, undo/redo, and audit trail.",
+      "target_user": "Intermediate student wanting to understand architectural patterns",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy", "impressive-to-judges"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "TypeScript", "Immer", "localStorage"],
+      "difficulty_details": {
+        "concepts": ["event sourcing", "command pattern", "state projection", "undo stack"],
+        "prerequisite": "Intermediate JavaScript, basic Redux familiarity"
+      }
+    },
+    {
+      "id": "stu_052",
+      "title": "Build Your Own Markdown Renderer",
+      "problem": "Students who use Markdown every day don't understand the parsing pipeline — tokenizer → AST → HTML — that makes it work.",
+      "concept": "A Markdown-to-HTML renderer built from scratch using a tokenizer and recursive descent parser — no markdown libraries.",
+      "target_user": "CS student interested in parsers or language processing",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["TypeScript", "Regex", "AST", "DOM manipulation"],
+      "difficulty_details": {
+        "concepts": ["lexer", "recursive descent", "AST nodes", "HTML rendering"],
+        "prerequisite": "JavaScript, basic compiler theory"
+      }
+    },
+    {
+      "id": "stu_053",
+      "title": "Build Your Own JWT Library",
+      "problem": "Students use JWT for auth but blindly copy code from tutorials without knowing what the signature actually verifies or why.",
+      "concept": "Implement JWT creation (HS256), parsing, and verification from scratch using only the Web Crypto API — no jwt libraries.",
+      "target_user": "Bootcamp student who has used JWTs but never understood the internals",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_day",
+      "tags": ["codecrafters", "portfolio-worthy", "bootcamp-project"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["JavaScript", "Web Crypto API", "Base64url encoding"],
+      "difficulty_details": {
+        "concepts": ["HMAC-SHA256", "Base64url", "header.payload.signature structure"],
+        "prerequisite": "JavaScript, basic cryptography concepts"
+      }
+    },
+    {
+      "id": "stu_054",
+      "title": "Build Your Own Promise (A+ Spec)",
+      "problem": "JavaScript developers use Promises and async/await without understanding microtask queues, resolution chains, or the Promises/A+ spec.",
+      "concept": "Implement a fully spec-compliant Promise from scratch including .then, .catch, .all, .race, and microtask scheduling.",
+      "target_user": "Intermediate JavaScript developer or bootcamp grad leveling up",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy", "impressive-to-judges"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["JavaScript", "Promises/A+ spec", "queueMicrotask"],
+      "difficulty_details": {
+        "concepts": ["Promise states", "resolution chain", "microtask queue", "then() chaining"],
+        "prerequisite": "Solid JavaScript fundamentals"
+      }
+    },
+    {
+      "id": "stu_055",
+      "title": "Build Your Own Virtual DOM",
+      "problem": "React developers use JSX and state but can't explain what re-rendering actually means or how the diffing algorithm optimizes updates.",
+      "concept": "A minimal Virtual DOM implementation with createElement, diff, and patch functions — can render a dynamic list without React.",
+      "target_user": "React developer wanting to understand framework internals",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "advanced",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy", "impressive-to-judges"],
+      "wow_factor": 5,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["JavaScript", "DOM API", "Tree diffing"],
+      "difficulty_details": {
+        "concepts": ["vnode representation", "reconciliation", "keyed diffing", "patch operations"],
+        "prerequisite": "Intermediate JavaScript, React experience"
+      }
+    },
+    {
+      "id": "stu_056",
+      "title": "Build Your Own Rate Limiter (Token Bucket)",
+      "problem": "API developers add rate limiting as an afterthought and often implement it incorrectly, leading to race conditions and bypasses.",
+      "concept": "Implement token bucket and sliding window rate limiters as Express middleware from scratch — with Redis-backed distributed support.",
+      "target_user": "Backend bootcamp student or junior developer working on API projects",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy", "bootcamp-project"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Node.js", "Redis", "Express.js"],
+      "difficulty_details": {
+        "concepts": ["token bucket algorithm", "sliding window", "atomic Redis operations"],
+        "prerequisite": "Node.js, basic Redis"
+      }
+    },
+    {
+      "id": "stu_057",
+      "title": "Algorithm Visualizer with Step-Through",
+      "problem": "Students memorize sorting algorithms without actually understanding how elements move — they can recite code but can't debug it.",
+      "concept": "Animated visualizer for sorting and graph algorithms with a step-through mode showing exact variable states at each step.",
+      "target_user": "CS student studying data structures and algorithms for interviews",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "2_weeks",
+      "tags": ["portfolio-worthy", "hackathon-ready", "impressive-to-judges", "bootcamp-project"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "D3.js", "Framer Motion", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["animation state machine", "generator functions for stepping", "algorithm instrumentation"],
+        "prerequisite": "React, JavaScript generators"
+      }
+    },
+    {
+      "id": "stu_058",
+      "title": "Habit Loop Tracker for Coders",
+      "problem": "Students trying to build coding habits have tools that are either too gamified (Duolingo-style) or too sparse (plain checklists).",
+      "concept": "Track your coding habits as loops (cue → routine → reward) — visualize which triggers and rewards actually reinforce your coding sessions.",
+      "target_user": "Bootcamp student building a consistent coding practice",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["beginner-friendly", "bootcamp-project", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Firebase", "Chart.js"],
+      "difficulty_details": {
+        "concepts": ["habit loop model", "streak logic", "visualization"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_059",
+      "title": "Tech Stack Decision Tree",
+      "problem": "Students starting a new project spend hours in analysis paralysis choosing between React vs Vue, Firebase vs Supabase, etc.",
+      "concept": "Answer 6 questions about your project (scale, team size, budget, timeline) → AI recommends a specific tech stack with justification.",
+      "target_user": "Bootcamp student or CS student starting a side project",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Claude API"],
+      "difficulty_details": {
+        "concepts": ["decision tree logic", "multi-step wizard UI"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_060",
+      "title": "Code Smell Detector for Beginners",
+      "problem": "Junior developers write working but unmaintainable code and don't get feedback on code quality until their first code review.",
+      "concept": "Paste code → AI identifies specific code smells (god functions, magic numbers, deep nesting) and explains why they're problematic with fixes.",
+      "target_user": "Bootcamp student in weeks 8–16 or junior developer",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["bootcamp-project", "beginner-friendly", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Claude API", "Prism.js"],
+      "difficulty_details": {
+        "concepts": ["code analysis prompting", "highlighted feedback UI"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_061",
+      "title": "Codebase Onboarding Guide Generator",
+      "problem": "Students who join open source projects or team projects spend days just understanding folder structure and where to find what.",
+      "concept": "Point at a GitHub repo → AI generates a beginner-friendly onboarding guide explaining architecture, entry points, and how to run it.",
+      "target_user": "CS student or bootcamp grad contributing to a new codebase for the first time",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["portfolio-worthy", "bootcamp-project", "hackathon-ready"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["Next.js", "GitHub API", "Claude API"],
+      "difficulty_details": {
+        "concepts": ["repo tree traversal", "file summarization", "architecture inference"],
+        "prerequisite": "Next.js, GitHub API"
+      }
+    },
+    {
+      "id": "stu_062",
+      "title": "Nutrition Tracker for Student Athletes",
+      "problem": "Student athletes have specific nutritional needs tied to training cycles but use general apps built for sedentary adults.",
+      "concept": "Log meals + training schedule → app calculates targets adjusted for activity, flags deficiencies, and suggests cheap foods to fix gaps.",
+      "target_user": "University student athlete on a tight budget",
+      "section": "student",
+      "domain": "health",
+      "skill_level": "intermediate",
+      "time_to_build": "2_weeks",
+      "tags": ["portfolio-worthy", "hackathon-ready"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React Native", "Nutritionix API", "Firebase", "Expo"],
+      "difficulty_details": {
+        "concepts": ["TDEE calculation", "macro tracking", "nutrition API integration"],
+        "prerequisite": "React Native, REST APIs"
+      }
+    },
+    {
+      "id": "stu_063",
+      "title": "Peer Tutoring Marketplace",
+      "problem": "Students who are struggling in courses don't seek expensive professional tutors, and students who excel have no way to monetize their knowledge.",
+      "concept": "A campus-first marketplace where strong students list tutoring sessions by subject and struggling students book and pay — verified by student ID.",
+      "target_user": "University students on both sides of the knowledge gap",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "2_weeks",
+      "tags": ["portfolio-worthy", "startup-potential", "hackathon-ready"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Next.js", "Supabase", "Stripe", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["marketplace auth", "booking system", "payment splits"],
+        "prerequisite": "Next.js, Stripe basics"
+      }
+    },
+    {
+      "id": "stu_064",
+      "title": "Personal AI Career Advisor for CS Students",
+      "problem": "CS students make major career decisions (ML vs backend vs mobile vs DevOps) based on hype or random internet advice, not their actual strengths.",
+      "concept": "Complete a 10-minute skills + interest assessment → AI maps you to 3 specific career paths with tailored learning roadmaps.",
+      "target_user": "CS student in their 2nd or 3rd year unsure about career direction",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "2_weeks",
+      "tags": ["portfolio-worthy", "bootcamp-project", "startup-potential"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Next.js", "Claude API", "Firebase"],
+      "difficulty_details": {
+        "concepts": ["multi-step assessment", "structured AI output", "roadmap rendering"],
+        "prerequisite": "Next.js, Claude API"
+      }
+    },
+    {
+      "id": "stu_065",
+      "title": "Hackathon Project Submission Validator",
+      "problem": "Hackathon teams spend the last 2 hours scrambling because they didn't know exactly what the submission checklist required.",
+      "concept": "Enter the hackathon rules URL + your project details → AI checks all submission requirements and flags missing items before the deadline.",
+      "target_user": "Hackathon participant in the final stretch of an event",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Claude API", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["requirements extraction from text", "checklist UI"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_066",
+      "title": "Leetcode Companion with Pattern Recognition",
+      "problem": "Students solve 200 LeetCode problems and still fail interviews because they don't recognize which pattern applies to an unseen problem.",
+      "concept": "Describe a problem → AI identifies the pattern (two pointers, sliding window, DP, etc.) and links to problems that teach that pattern.",
+      "target_user": "CS student in the intermediate phase of interview prep",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["portfolio-worthy", "bootcamp-project", "hackathon-ready"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Claude API", "LeetCode data JSON"],
+      "difficulty_details": {
+        "concepts": ["pattern classification prompting", "problem taxonomy"],
+        "prerequisite": "Algorithms knowledge, React basics"
+      }
+    },
+    {
+      "id": "stu_067",
+      "title": "Sleep Schedule Optimizer for Students",
+      "problem": "Students have wildly irregular sleep schedules due to late-night studying and early classes, wrecking their cognitive performance.",
+      "concept": "Input your class schedule and sleep goal → app calculates optimal bedtime, wake-up time, and nap windows and sends daily reminders.",
+      "target_user": "University student struggling with fatigue and inconsistent sleep",
+      "section": "student",
+      "domain": "health",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Notification API", "localStorage"],
+      "difficulty_details": {
+        "concepts": ["sleep cycle math", "notification scheduling", "calendar parsing"],
+        "prerequisite": "Basic JavaScript"
+      }
+    },
+    {
+      "id": "stu_068",
+      "title": "GitHub Activity to LinkedIn Post Generator",
+      "problem": "Bootcamp students build projects consistently but never share their progress on LinkedIn — missing huge visibility opportunities.",
+      "concept": "Connect GitHub → weekly digest of your commits and merged PRs → one-click generates a ready-to-post LinkedIn update showcasing growth.",
+      "target_user": "Bootcamp student or junior developer building in public",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["bootcamp-project", "beginner-friendly", "hackathon-ready"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "GitHub API", "Claude API"],
+      "difficulty_details": {
+        "concepts": ["commit message parsing", "professional post generation"],
+        "prerequisite": "Basic JavaScript, GitHub API"
+      }
+    },
+    {
+      "id": "stu_069",
+      "title": "Lecture Attendance Gamification App",
+      "problem": "Students skip lectures because attendance tracking is passive and there's no incentive structure beyond the implicit threat of missing content.",
+      "concept": "Professors post a check-in code; students scan or enter it → attendance earns XP, builds a leaderboard, and unlocks course achievements.",
+      "target_user": "University students in large lecture-based courses",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "2_weeks",
+      "tags": ["hackathon-ready", "portfolio-worthy", "impressive-to-judges"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Firebase", "QR Code", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["QR generation and scanning", "leaderboard logic", "gamification XP"],
+        "prerequisite": "React, Firebase realtime"
+      }
+    },
+    {
+      "id": "stu_070",
+      "title": "AI-Powered Debugging Buddy",
+      "problem": "Bootcamp students get stuck on bugs for hours and feel embarrassed asking instructors the same questions repeatedly.",
+      "concept": "Paste your error + relevant code → AI walks you through the debugging process Socratically — asking questions to lead you to the answer.",
+      "target_user": "Bootcamp student in weeks 1–10 learning to debug independently",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Claude API", "Prism.js"],
+      "difficulty_details": {
+        "concepts": ["Socratic prompting", "error message parsing", "guided conversation UI"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_071",
+      "title": "Campus Resource Navigator",
+      "problem": "Universities have dozens of support resources (counseling, food pantry, financial aid, career center) but students don't know they exist.",
+      "concept": "A searchable, filterable directory of all campus resources with live hours, directions, and student reviews — updated via community submissions.",
+      "target_user": "First-year university student or transfer student unfamiliar with campus services",
+      "section": "student",
+      "domain": "social",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["beginner-friendly", "hackathon-ready", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Firebase", "Google Maps API"],
+      "difficulty_details": {
+        "concepts": ["location data", "community submissions", "search and filter"],
+        "prerequisite": "Basic React, Firebase"
+      }
+    },
+    {
+      "id": "stu_072",
+      "title": "Mini SaaS Metrics Dashboard (For Student Projects)",
+      "problem": "Students build projects with real users but have no way to track meaningful metrics — no DAU, retention, or engagement data.",
+      "concept": "Add a snippet to your project → dashboard shows daily active users, retention curves, and feature usage without setting up Mixpanel.",
+      "target_user": "CS student or bootcamp grad who has launched a real side project",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "intermediate",
+      "time_to_build": "2_weeks",
+      "tags": ["portfolio-worthy", "startup-potential", "impressive-to-judges"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Next.js", "Supabase", "Chart.js", "event tracking SDK"],
+      "difficulty_details": {
+        "concepts": ["event ingestion", "retention cohort logic", "dashboard charting"],
+        "prerequisite": "Next.js, Supabase"
+      }
+    },
+    {
+      "id": "stu_073",
+      "title": "Programming Language Rosetta Stone",
+      "problem": "Students who know Python well struggle to read or write JavaScript, Go, or TypeScript for the first time because the cognitive jump feels huge.",
+      "concept": "Write a snippet in your known language → see it side-by-side in 5 other languages with annotations highlighting the key differences.",
+      "target_user": "CS student or bootcamp grad learning a second programming language",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Claude API", "Prism.js"],
+      "difficulty_details": {
+        "concepts": ["code translation prompting", "syntax comparison UI"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_074",
+      "title": "Side Hustle Income Tax Calculator for Students",
+      "problem": "Student freelancers and gig workers have no idea how much self-employment tax they owe until they get a scary bill in April.",
+      "concept": "Enter monthly freelance income and expenses → get quarterly estimated tax payment amounts, deduction suggestions, and an April projection.",
+      "target_user": "College student earning freelance or gig income for the first time",
+      "section": "student",
+      "domain": "fintech",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["beginner-friendly", "bootcamp-project", "hackathon-ready"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Chart.js", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["self-employment tax calculation", "quarterly estimates", "deduction categories"],
+        "prerequisite": "Basic React, math"
+      }
+    },
+    {
+      "id": "stu_075",
+      "title": "Study Group Scheduler with Conflict Resolver",
+      "problem": "Coordinating a time when 5 students are all free for a study session involves 40 messages and still results in someone missing.",
+      "concept": "Each member enters their availability → app finds optimal time slots, accounts for time zones, and sends a calendar invite automatically.",
+      "target_user": "University students coordinating study groups remotely or across campuses",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["beginner-friendly", "bootcamp-project", "hackathon-ready"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Firebase", "Google Calendar API"],
+      "difficulty_details": {
+        "concepts": ["availability grid UI", "intersection algorithm", "calendar API"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_076",
+      "title": "Competitive Programming Practice Tracker",
+      "problem": "Students participating in ICPC or Codeforces have no structured tracking for practice sessions, topics covered, or rating trajectory.",
+      "concept": "Connect Codeforces account → weekly problem targets by difficulty, topic coverage map, and a rating trajectory predictor.",
+      "target_user": "CS student preparing for ICPC or Codeforces rating improvement",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["portfolio-worthy", "research-backed"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Codeforces API", "Chart.js", "Firebase"],
+      "difficulty_details": {
+        "concepts": ["Codeforces API", "rating prediction model", "progress tracking"],
+        "prerequisite": "React, REST APIs"
+      }
+    },
+    {
+      "id": "stu_077",
+      "title": "Spaced Repetition CLI for Coders",
+      "problem": "Developers want to memorize syntax, API methods, and design patterns but don't have a CLI-native flashcard system.",
+      "concept": "A terminal-based spaced repetition system with a card deck format — review syntax cards in your terminal without leaving your workflow.",
+      "target_user": "Developer or CS student who lives in the terminal",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["Python", "SQLite", "Rich (terminal UI)", "SM-2 algorithm"],
+      "difficulty_details": {
+        "concepts": ["SM-2 spaced repetition algorithm", "SQLite card storage", "terminal UI"],
+        "prerequisite": "Python, basic SQL"
+      }
+    },
+    {
+      "id": "stu_078",
+      "title": "Build Your Own Event Emitter",
+      "problem": "Node.js developers use EventEmitter constantly without understanding the observer pattern or how pub-sub is implemented.",
+      "concept": "Implement an EventEmitter from scratch with on, once, off, emit, and wildcard support — then visualize event flows live.",
+      "target_user": "Node.js bootcamp student or intermediate JavaScript developer",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["codecrafters", "bootcamp-project", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["JavaScript", "Node.js"],
+      "difficulty_details": {
+        "concepts": ["observer pattern", "listener maps", "once semantics", "wildcard matching"],
+        "prerequisite": "JavaScript functions and objects"
+      }
+    },
+    {
+      "id": "stu_079",
+      "title": "Build Your Own State Machine",
+      "problem": "Frontend developers deal with complex UI state all the time but reach for useReducer or Redux without understanding finite state machines.",
+      "concept": "Implement a typed finite state machine library from scratch with transitions, guards, and side effects — then build a traffic light demo.",
+      "target_user": "Intermediate React developer wanting to understand XState concepts from the ground up",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy", "impressive-to-judges"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["TypeScript", "React"],
+      "difficulty_details": {
+        "concepts": ["FSM states", "transition table", "guards", "side effects"],
+        "prerequisite": "TypeScript, intermediate React"
+      }
+    },
+    {
+      "id": "stu_080",
+      "title": "Build Your Own CSS-in-JS Library",
+      "problem": "Developers who use styled-components or Emotion have no idea how dynamic CSS injection, hashing, or the style sheet works.",
+      "concept": "A minimal CSS-in-JS runtime that takes template literals, generates unique class names, and injects styles into the document head.",
+      "target_user": "React developer curious about how styling libraries work under the hood",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["codecrafters", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["JavaScript", "Template Literals", "MurmurHash"],
+      "difficulty_details": {
+        "concepts": ["tagged template literals", "class name hashing", "CSSOM injection"],
+        "prerequisite": "Intermediate JavaScript, React"
+      }
+    },
+    {
+      "id": "stu_081",
+      "title": "Personal Finance Dashboard for Students",
+      "problem": "Students using budgeting apps like Mint find them overwhelming and bloated — designed for adults with mortgages, not people eating ramen.",
+      "concept": "A dead-simple financial dashboard: income, fixed costs, and fun money — shows a single daily budget number and a week-ahead projection.",
+      "target_user": "College student tracking a part-time income and living expenses",
+      "section": "student",
+      "domain": "fintech",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["beginner-friendly", "bootcamp-project", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Firebase", "Chart.js", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["income/expense modeling", "daily budget math", "simple chart"],
+        "prerequisite": "Basic React, Firebase"
+      }
+    },
+    {
+      "id": "stu_082",
+      "title": "Hackathon Demo Day Timer App",
+      "problem": "Hackathon demo sessions run over because teams have no structured time tracker — judges wait and the event runs behind schedule.",
+      "concept": "A shared-screen timer app for hackathon demo days — organizer sets team time slots, audience sees countdown, and a buzzer goes off at the end.",
+      "target_user": "Hackathon organizer or team running demo day presentations",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Socket.io", "Tailwind CSS"],
+      "difficulty_details": {
+        "concepts": ["synchronized timer", "room-based state", "audio alerts"],
+        "prerequisite": "Basic React, Socket.io"
+      }
+    },
+    {
+      "id": "stu_083",
+      "title": "Personalized Reading List from Podcast Transcripts",
+      "problem": "Students hear book recommendations on podcasts but forget them by the next day — there's no seamless way to capture and organize them.",
+      "concept": "Paste a podcast transcript or YouTube URL → AI extracts all book, article, and tool recommendations and builds a reading list with summaries.",
+      "target_user": "Student or self-learner who consumes a lot of educational podcasts",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "OpenAI API", "YouTube Transcript API"],
+      "difficulty_details": {
+        "concepts": ["transcript extraction", "entity recognition prompting", "list UI"],
+        "prerequisite": "Basic JavaScript, API calls"
+      }
+    },
+    {
+      "id": "stu_084",
+      "title": "Automated Class Notes from Slides",
+      "problem": "Professors post slide decks but students still need to manually convert them into structured notes — a 2-hour job after every class.",
+      "concept": "Upload a slide deck (PDF/PPT) → AI generates structured, readable notes in Notion-style format with headings and bullet points.",
+      "target_user": "University student who gets slide decks but needs usable notes for studying",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "PDF.js", "Claude API"],
+      "difficulty_details": {
+        "concepts": ["PDF text extraction", "structured note generation"],
+        "prerequisite": "Basic JavaScript"
+      }
+    },
+    {
+      "id": "stu_085",
+      "title": "Technical Interview Prep Roadmap Generator",
+      "problem": "Students starting interview prep don't know what to study, in what order, for how long — they random-walk through YouTube and LeetCode.",
+      "concept": "Enter your target role, timeline, and current level → AI generates a week-by-week study roadmap with specific problems and resources.",
+      "target_user": "CS student or bootcamp grad 2–6 months from job hunting",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["bootcamp-project", "beginner-friendly", "hackathon-ready", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Claude API"],
+      "difficulty_details": {
+        "concepts": ["structured roadmap generation", "week-by-week planning"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_086",
+      "title": "Git Commit Message Writer",
+      "problem": "Developers write awful commit messages ('fix stuff', 'changes', 'asdf') because thinking of a good one mid-flow breaks concentration.",
+      "concept": "Paste your git diff → AI writes a descriptive, conventional-commits-formatted message you can copy with one click.",
+      "target_user": "Bootcamp student or junior developer learning good commit hygiene",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Claude API"],
+      "difficulty_details": {
+        "concepts": ["diff parsing", "conventional commits format"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_087",
+      "title": "Architecture Decision Record (ADR) Generator",
+      "problem": "Student teams make technical decisions verbally and forget the reasoning — causing arguments and bad refactors weeks later.",
+      "concept": "Describe a tech decision you're making → AI generates a formal ADR doc with context, options, decision, and consequences.",
+      "target_user": "CS student working on a team project or final year project",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_day",
+      "tags": ["bootcamp-project", "portfolio-worthy"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Claude API", "Markdown export"],
+      "difficulty_details": {
+        "concepts": ["ADR format", "structured output", "markdown generation"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_088",
+      "title": "Language Learning Flashcards from YouTube",
+      "problem": "Students learning a foreign language spend more time searching for vocabulary lists than actually studying them.",
+      "concept": "Paste a YouTube video URL in a foreign language → AI extracts key vocabulary, translates, and creates a ready-to-study deck.",
+      "target_user": "University student taking a foreign language class or learning independently",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "YouTube Transcript API", "OpenAI API"],
+      "difficulty_details": {
+        "concepts": ["transcript extraction", "vocab identification", "flashcard UI"],
+        "prerequisite": "Basic JavaScript"
+      }
+    },
+    {
+      "id": "stu_089",
+      "title": "Open Source Project Health Checker",
+      "problem": "Students evaluating open source libraries to use in projects have no quick way to assess if the project is actively maintained or dying.",
+      "concept": "Enter a GitHub repo URL → instant health report: commit frequency, issue response time, bus factor, contributor diversity, and a go/no-go score.",
+      "target_user": "CS student or bootcamp grad choosing open source dependencies",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["portfolio-worthy", "bootcamp-project"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "GitHub GraphQL API", "Chart.js"],
+      "difficulty_details": {
+        "concepts": ["GitHub metrics API", "bus factor calculation", "health scoring"],
+        "prerequisite": "React, GitHub API"
+      }
+    },
+    {
+      "id": "stu_090",
+      "title": "Keyboard Shortcut Trainer for Developers",
+      "problem": "Developers know their editor has hundreds of useful shortcuts but never learn them because there's no structured, context-aware practice tool.",
+      "concept": "Pick your editor (VS Code, Vim, etc.) → practice shortcuts in mini drills, track which ones you keep forgetting, and get a mastery percentage.",
+      "target_user": "Developer or bootcamp student wanting to become more productive in their editor",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["hackathon-ready", "beginner-friendly", "bootcamp-project"],
+      "wow_factor": 3,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "Tailwind CSS", "localStorage"],
+      "difficulty_details": {
+        "concepts": ["keyboard event detection", "shortcut taxonomy", "spaced repetition logic"],
+        "prerequisite": "Basic React"
+      }
+    },
+    {
+      "id": "stu_091",
+      "title": "Co-founder Compatibility Quiz",
+      "problem": "Student entrepreneurs rush to start companies with friends without checking if they have complementary skills and aligned values.",
+      "concept": "Two people complete independent assessments on skills, work style, and vision → get a compatibility score with specific tension areas flagged.",
+      "target_user": "CS student or bootcamp grad considering starting a company with a co-founder",
+      "section": "student",
+      "domain": "social",
+      "skill_level": "beginner",
+      "time_to_build": "1_week",
+      "tags": ["hackathon-ready", "startup-potential", "portfolio-worthy"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Firebase", "Claude API"],
+      "difficulty_details": {
+        "concepts": ["multi-user forms", "compatibility scoring", "shared sessions"],
+        "prerequisite": "Basic React, Firebase"
+      }
+    },
+    {
+      "id": "stu_092",
+      "title": "Tech Stack Cost Estimator",
+      "problem": "Students building side projects blow past free tiers and get surprise cloud bills because they never estimated costs before launching.",
+      "concept": "Describe your project and expected usage → calculator estimates monthly cost for AWS, GCP, Vercel, Firebase, Supabase with tier comparisons.",
+      "target_user": "CS student or bootcamp grad launching a first real project",
+      "section": "student",
+      "domain": "productivity",
+      "skill_level": "intermediate",
+      "time_to_build": "1_week",
+      "tags": ["portfolio-worthy", "hackathon-ready"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": true,
+      "rough_tech": ["React", "pricing data JSON", "Claude API"],
+      "difficulty_details": {
+        "concepts": ["pricing model logic", "usage estimations", "comparison table"],
+        "prerequisite": "React, basic cloud pricing knowledge"
+      }
+    },
+    {
+      "id": "stu_093",
+      "title": "AI-Powered Essay Argument Strengthener",
+      "problem": "Students submit essays with weak arguments that don't hold up under scrutiny — they can't identify the logical gaps themselves.",
+      "concept": "Paste your thesis and key arguments → AI plays devil's advocate, finds weaknesses, and suggests specific evidence or counter-argument responses.",
+      "target_user": "University student writing academic essays or research papers",
+      "section": "student",
+      "domain": "education",
+      "skill_level": "beginner",
+      "time_to_build": "1_day",
+      "tags": ["hackathon-ready", "beginner-friendly", "research-backed"],
+      "wow_factor": 4,
+      "source": "manual",
+      "validated": false,
+      "rough_tech": ["React", "Claude API"],
+      "difficulty_details": {
+        "concepts": ["argument analysis prompting", "devil's advocate framing"],
+        "prerequisite": "Basic React"
+      }
+    }
+  ]
+}

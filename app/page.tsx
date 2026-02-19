@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Sparkles, ArrowRight, Globe, Brain, Zap, Rocket, ChevronRight } from 'lucide-react';
+import { Sparkles, ArrowRight, Globe, Brain, Zap, Rocket, ChevronRight, Library } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -9,7 +9,7 @@ export default function HomePage() {
       <div className="orb orb-green-light w-[400px] h-[400px] top-[50%] -right-[150px] opacity-15" style={{ animationDelay: '-5s' }} />
 
       {/* Header */}
-      <header className="relative z-10 px-6 py-5">
+      <header className="relative z-10 px-6 py-5 border-b border-green-500/10">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
@@ -17,6 +17,19 @@ export default function HomePage() {
             </div>
             <span className="text-xl font-bold text-white">IdeaGen</span>
           </div>
+          
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center gap-8">
+            <Link href="/ideavault" className="flex items-center gap-2 text-gray-300 hover:text-green-400 transition-colors">
+              <Library className="w-4 h-4" />
+              IdeaVault
+            </Link>
+            <Link href="/generate" className="flex items-center gap-2 text-gray-300 hover:text-green-400 transition-colors">
+              <Zap className="w-4 h-4" />
+              Generate
+            </Link>
+          </nav>
+          
           <Link
             href="/generate"
             className="glow-button px-5 py-2.5 rounded-full font-medium text-sm flex items-center gap-2"
