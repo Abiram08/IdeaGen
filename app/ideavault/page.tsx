@@ -38,7 +38,7 @@ export default function IdeaVaultPage() {
               IdeaVault <span className="text-green-400">Library</span>
             </h1>
             <p className="text-xl text-gray-400 max-w-2xl">
-              Explore curated ideas from CodeCrafters challenges and Y Combinator startups. Filter by category and tags to find inspiration.
+              Explore curated ideas for students and startup founders. Filter by category and tags to find inspiration. Click on any idea to see full details and tech stack.
             </p>
           </div>
 
