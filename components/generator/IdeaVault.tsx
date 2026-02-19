@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Search } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { X, Search, Filter } from 'lucide-react';
 
 interface Idea {
   id: string;
@@ -27,6 +28,7 @@ interface DataSource {
 }
 
 export function IdeaVault() {
+  const router = useRouter();
   const [allIdeas, setAllIdeas] = useState<Array<Idea & { source: string }>>([]);
   const [filteredIdeas, setFilteredIdeas] = useState<Array<Idea & { source: string }>>([]);
   const [loading, setLoading] = useState(true);
@@ -35,6 +37,16 @@ export function IdeaVault() {
   const [searchQuery, setSearchQuery] = useState('');
   const [availableTags, setAvailableTags] = useState<string[]>([]);
   const [selectedIdea, setSelectedIdea] = useState<(Idea & { source: string }) | null>(null);
+  const [showFilters, setShowFilters] = useState(true);
+
+  const handleCreateRoadmap = (idea: Idea & { source: string }) => {
+    const params = new URLSearchParams({
+      ideaId: idea.id,
+      source: idea.source,
+    });
+    setSelectedIdea(null);
+    router.push(`/roadmap/create?${params.toString()}`);
+  };
 
   // Load data
   useEffect(() => {
@@ -124,10 +136,20 @@ export function IdeaVault() {
   }
 
   return (
-    <div className="space-y-8">
-      {/* Filters */}
-      <div className="glass-card rounded-2xl p-6 space-y-6">
-        {/* Search */}
+    <div className="space-y-6">
+      {/* Filter Toggle Button and Search */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center gap-2 px-4 py-2.5 bg-green-500/20 text-green-400 border border-green-500/50 rounded-lg font-medium hover:bg-green-500/30 transition-colors"
+          >
+            <Filter className="w-5 h-5" />
+            {showFilters ? 'Hide Filters' : 'Show Filters'}
+          </button>
+        </div>
+
+        {/* Search Bar */}
         <div className="relative">
           <Search className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
           <input
@@ -138,65 +160,70 @@ export function IdeaVault() {
             className="w-full pl-10 pr-4 py-2.5 bg-[#0c0c14] border border-green-500/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-green-500/50 transition-colors"
           />
         </div>
-
-        {/* Source Filter */}
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-wrap">
-          <span className="text-gray-300 font-medium">Source:</span>
-          <div className="flex gap-2 flex-wrap">
-            {['all', 'students', 'startups'].map(source => (
-              <button
-                key={source}
-                onClick={() => setSelectedSource(source as 'all' | 'students' | 'startups')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedSource === source
-                    ? 'bg-green-500/20 text-green-400 border border-green-500/50'
-                    : 'bg-[#0c0c14] text-gray-300 border border-gray-500/20 hover:border-green-500/30'
-                }`}
-              >
-                {source === 'all' ? 'All Ideas' : source === 'students' ? 'Students' : 'Startups'}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Tags Filter */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-gray-300 font-medium">Filter by Tags:</span>
-            {selectedTags.length > 0 && (
-              <button
-                onClick={() => setSelectedTags([])}
-                className="text-sm text-green-400 hover:text-green-300 transition-colors"
-              >
-                Clear all
-              </button>
-            )}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {availableTags.map(tag => (
-              <button
-                key={tag}
-                onClick={() => toggleTag(tag)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  selectedTags.includes(tag)
-                    ? 'bg-green-500/30 text-green-300 border border-green-500/50'
-                    : 'bg-[#0c0c14] text-gray-400 border border-gray-500/20 hover:border-green-500/30'
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Filter Summary */}
-        <div className="pt-4 border-t border-gray-500/20">
-          <p className="text-sm text-gray-400">
-            Showing <span className="text-green-400 font-semibold">{filteredIdeas.length}</span> of{' '}
-            <span className="text-green-400 font-semibold">{allIdeas.length}</span> ideas
-          </p>
-        </div>
       </div>
+
+      {/* Filters Section - Collapsible */}
+      {showFilters && (
+        <div className="glass-card rounded-2xl p-6 space-y-6 animate-in fade-in duration-300">
+          {/* Source Filter */}
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-wrap">
+            <span className="text-gray-300 font-medium">Source:</span>
+            <div className="flex gap-2 flex-wrap">
+              {['all', 'students', 'startups'].map(source => (
+                <button
+                  key={source}
+                  onClick={() => setSelectedSource(source as 'all' | 'students' | 'startups')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    selectedSource === source
+                      ? 'bg-green-500/20 text-green-400 border border-green-500/50'
+                      : 'bg-[#0c0c14] text-gray-300 border border-gray-500/20 hover:border-green-500/30'
+                  }`}
+                >
+                  {source === 'all' ? 'All Ideas' : source === 'students' ? 'Students' : 'Startups'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Tags Filter */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-gray-300 font-medium">Filter by Tags:</span>
+              {selectedTags.length > 0 && (
+                <button
+                  onClick={() => setSelectedTags([])}
+                  className="text-sm text-green-400 hover:text-green-300 transition-colors"
+                >
+                  Clear all
+                </button>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {availableTags.map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => toggleTag(tag)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    selectedTags.includes(tag)
+                      ? 'bg-green-500/30 text-green-300 border border-green-500/50'
+                      : 'bg-[#0c0c14] text-gray-400 border border-gray-500/20 hover:border-green-500/30'
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Filter Summary */}
+          <div className="pt-4 border-t border-gray-500/20">
+            <p className="text-sm text-gray-400">
+              Showing <span className="text-green-400 font-semibold">{filteredIdeas.length}</span> of{' '}
+              <span className="text-green-400 font-semibold">{allIdeas.length}</span> ideas
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Ideas Grid */}
       {filteredIdeas.length === 0 ? (
@@ -207,86 +234,62 @@ export function IdeaVault() {
           </div>
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filteredIdeas.map(idea => (
             <div
               key={idea.id}
               onClick={() => setSelectedIdea(idea)}
-              className="glass-card rounded-xl p-6 hover:border-green-500/30 transition-all hover:shadow-lg hover:shadow-green-500/10 cursor-pointer"
+              className="glass-card rounded-xl p-4 hover:border-green-500/50 transition-all hover:shadow-lg hover:shadow-green-500/20 cursor-pointer flex flex-col justify-between aspect-square overflow-hidden"
             >
-              <div className="space-y-3">
-                {/* Header with Source Badge */}
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-white mb-1">{idea.title}</h3>
-                    <p className="text-gray-400 line-clamp-2">{idea.description || idea.problem || idea.concept}</p>
-                  </div>
+              {/* Header with Source Badge */}
+              <div className="space-y-2 flex-1">
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="text-sm font-bold text-white line-clamp-2 flex-1">{idea.title}</h3>
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
+                    className={`px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap flex-shrink-0 ${
                       idea.source === 'students'
                         ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
                         : 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
                     }`}
                   >
-                    {idea.source === 'students' ? 'Students' : 'Startups'}
+                    {idea.source === 'students' ? 'S' : 'St'}
                   </span>
                 </div>
 
-                {/* ID and Metadata */}
-                <div className="flex flex-wrap gap-2 items-center text-xs">
-                  <span className="text-gray-500">ID: <span className="text-gray-400 font-mono">{idea.id}</span></span>
-                  {idea.difficulty && (
-                    <span className="text-gray-500">
-                      Difficulty: <span className="text-gray-400 capitalize">{idea.difficulty}</span>
-                    </span>
-                  )}
-                  {idea.category && (
-                    <span className="text-gray-500">
-                      Category: <span className="text-gray-400">{idea.category}</span>
-                    </span>
-                  )}
-                </div>
+                {/* Description Preview */}
+                <p className="text-xs text-gray-400 line-clamp-2">
+                  {idea.description || idea.problem || idea.concept}
+                </p>
 
                 {/* Tech Stack Preview */}
                 {idea.rough_tech && idea.rough_tech.length > 0 && (
-                  <div className="flex flex-wrap gap-1 pt-2">
-                    {idea.rough_tech.slice(0, 3).map((tech, idx) => (
+                  <div className="flex flex-wrap gap-1 pt-1">
+                    {idea.rough_tech.slice(0, 2).map((tech, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-1 bg-yellow-500/10 text-yellow-400 text-xs rounded border border-yellow-500/30"
+                        className="px-1.5 py-0.5 bg-yellow-500/10 text-yellow-400 text-xs rounded border border-yellow-500/30"
                       >
                         {tech}
                       </span>
                     ))}
-                    {idea.rough_tech.length > 3 && (
-                      <span className="px-2 py-1 bg-yellow-500/10 text-yellow-400 text-xs rounded border border-yellow-500/30">
-                        +{idea.rough_tech.length - 3} more
-                      </span>
-                    )}
                   </div>
                 )}
+              </div>
 
-                {/* Tags */}
+              {/* Footer - Tags */}
+              <div className="pt-2 border-t border-gray-700">
                 {idea.tags && idea.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    {idea.tags.slice(0, 3).map(tag => (
+                  <div className="flex flex-wrap gap-0.5">
+                    {idea.tags.slice(0, 2).map(tag => (
                       <span
                         key={tag}
-                        className="px-2.5 py-1 bg-green-500/10 text-green-400 text-xs rounded border border-green-500/30"
+                        className="px-1.5 py-0.5 bg-green-500/10 text-green-400 text-xs rounded border border-green-500/30"
                       >
                         {tag}
                       </span>
                     ))}
-                    {idea.tags.length > 3 && (
-                      <span className="px-2.5 py-1 bg-green-500/10 text-green-400 text-xs rounded border border-green-500/30">
-                        +{idea.tags.length - 3}
-                      </span>
-                    )}
                   </div>
                 )}
-
-                {/* Click hint */}
-                <p className="text-xs text-green-400/60 pt-2">Click to view details</p>
               </div>
             </div>
           ))}
@@ -324,6 +327,14 @@ export function IdeaVault() {
 
             {/* Modal Content */}
             <div className="px-8 py-6 space-y-6">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => handleCreateRoadmap(selectedIdea)}
+                  className="px-5 py-2.5 bg-green-500/20 text-green-300 border border-green-500/50 rounded-lg font-semibold hover:bg-green-500/30 transition-colors"
+                >
+                  Create Roadmap
+                </button>
+              </div>
               {/* Problem */}
               {selectedIdea.problem && (
                 <div>

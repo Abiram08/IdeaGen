@@ -1,6 +1,6 @@
 // Prompt templates for AI interactions
 
-import { IdeaState, RawContent, UserProfile } from '@/types/idea';
+import { IdeaState, RawContent, UserProfile, IdeaVaultIdea } from '@/types/idea';
 
 export const EXTRACT_SYSTEM_PROMPT = `You are a project idea extractor. Return ONLY valid JSON. No text outside the JSON.`;
 
@@ -85,4 +85,82 @@ Return ONLY valid JSON matching this schema exactly:
   "similar_products": string[],
   "first_thing_to_build": string
 }`;
+}
+
+export const GEMINI_ROADMAP_SYSTEM_PROMPT = `You are a senior project planner. Return ONLY valid JSON. No text outside JSON.`;
+
+export function getGeminiRoadmapUserPrompt(idea: IdeaVaultIdea, userProfile: UserProfile): string {
+  return `Create a detailed roadmap from this idea:
+${JSON.stringify(idea)}
+
+User profile:
+- Skill level: ${userProfile.skill_level}
+- Time available: ${userProfile.time_available}
+- Team size: ${userProfile.team_size}
+
+Return ONLY valid JSON with this schema:
+{
+  "title": string,
+  "summary": string,
+  "tech_stack": string[],
+  "day": [{
+    "title": string,
+    "items": string[]
+  }],
+  "week": [{
+    "title": string,
+    "items": string[]
+  }],
+  "month": [{
+    "title": string,
+    "items": string[]
+  }]
+}
+
+Rules:
+- Keep each section actionable and realistic.
+- 2-3 columns for each timeframe.
+- Each column should have 3-5 items.
+- Use clear, short task phrases.
+- Respect the time available; do not exceed that scale.
+`;
+}
+
+export function getGeminiRoadmapUserPromptStrict(idea: IdeaVaultIdea, userProfile: UserProfile): string {
+  return `STRICT MODE: Return only valid JSON. Keep it short.
+
+Idea:
+${JSON.stringify(idea)}
+
+User profile:
+- Skill level: ${userProfile.skill_level}
+- Time available: ${userProfile.time_available}
+- Team size: ${userProfile.team_size}
+
+Return ONLY valid JSON with this schema:
+{
+  "title": string,
+  "summary": string,
+  "tech_stack": string[],
+  "day": [{
+    "title": string,
+    "items": string[]
+  }],
+  "week": [{
+    "title": string,
+    "items": string[]
+  }],
+  "month": [{
+    "title": string,
+    "items": string[]
+  }]
+}
+
+Rules:
+- 1 column per timeframe.
+- 2 items per column.
+- Summary <= 120 characters.
+- Short phrases only.
+- Do not include extra commentary.
+`;
 }

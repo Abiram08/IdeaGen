@@ -42,6 +42,18 @@ export interface IdeaState {
   added: string[];
 }
 
+export interface IdeaVaultIdea {
+  id: string;
+  title: string;
+  problem?: string;
+  concept?: string;
+  description?: string;
+  rough_tech?: string[];
+  target_user?: string;
+  tags?: string[];
+  source?: string;
+}
+
 export interface ConversationMessage {
   role: 'user' | 'assistant';
   content: string;
@@ -60,8 +72,8 @@ export interface BrainstormResponse {
 
 export interface UserProfile {
   skill_level: 'beginner' | 'intermediate' | 'advanced';
-  time_available: '1 day' | '1 week' | '2 weeks' | '1 month';
-  team_size: 'solo' | '2 people' | '3-4 people';
+  time_available: string;
+  team_size: string;
 }
 
 export interface CoreFeature {
